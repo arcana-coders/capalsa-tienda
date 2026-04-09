@@ -1,65 +1,129 @@
-import Image from "next/image";
+export const dynamic = 'force-dynamic'
 
-export default function Home() {
+import Link from 'next/link'
+import { supabase } from '@/lib/supabase'
+import ProductCard from '@/components/catalog/ProductCard'
+
+async function getDestacados() {
+  const { data } = await supabase
+    .from('productos')
+    .select('id, asin, titulo, slug, precio, precio_compare, imagenes, marca, destacado')
+    .eq('activo', true)
+    .eq('destacado', true)
+    .limit(8)
+  return data ?? []
+}
+
+async function getCategorias() {
+  const { data } = await supabase
+    .from('categorias')
+    .select('id, nombre, slug, imagen_url')
+    .eq('activa', true)
+    .is('padre_id', null)
+    .order('orden')
+    .limit(8)
+  return data ?? []
+}
+
+const CATEGORIAS_FALLBACK = [
+  { id: '1', nombre: 'Herramientas', slug: 'herramientas', emoji: '🔧' },
+  { id: '2', nombre: 'Hogar', slug: 'hogar', emoji: '🏠' },
+  { id: '3', nombre: 'Electrónica', slug: 'electronica', emoji: '💡' },
+  { id: '4', nombre: 'Deportes', slug: 'deportes', emoji: '⚽' },
+  { id: '5', nombre: 'Jardinería', slug: 'jardineria', emoji: '🌿' },
+  { id: '6', nombre: 'Oficina', slug: 'oficina', emoji: '💼' },
+  { id: '7', nombre: 'Automotriz', slug: 'automotriz', emoji: '🚗' },
+  { id: '8', nombre: 'Bebés', slug: 'bebes', emoji: '🍼' },
+]
+
+export default async function HomePage() {
+  const [destacados, categorias] = await Promise.all([getDestacados(), getCategorias()])
+  const cats = categorias.length > 0 ? categorias : CATEGORIAS_FALLBACK
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <main>
+      {/* Hero Banner */}
+      <section className="bg-gradient-to-r from-[#1A1A1A] to-[#2d2d2d] text-white py-14 px-4">
+        <div className="max-w-7xl mx-auto text-center">
+          <p className="text-[#C4813A] text-sm font-semibold uppercase tracking-widest mb-3">
+            Envío gratis en todos tus pedidos
           </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+          <h1 className="text-3xl md:text-5xl font-bold mb-4 leading-tight">
+            Los mejores productos,<br />al mejor precio
+          </h1>
+          <p className="text-white/70 text-base mb-8 max-w-xl mx-auto">
+            Miles de productos seleccionados para ti. Herramientas, hogar, electrónica y mucho más.
+          </p>
+          <Link
+            href="/categorias"
+            className="inline-block bg-[#C4813A] hover:bg-[#A36A28] text-white font-semibold px-8 py-3 rounded-full transition-colors text-sm"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            Ver todo el catálogo
+          </Link>
         </div>
-      </main>
-    </div>
-  );
+      </section>
+
+      {/* Categorías */}
+      <section className="max-w-7xl mx-auto px-4 py-10">
+        <h2 className="text-xl font-bold text-[#1A1A1A] mb-6">Comprar por categoría</h2>
+        <div className="grid grid-cols-4 md:grid-cols-8 gap-3">
+          {cats.map((cat: any) => (
+            <Link
+              key={cat.id}
+              href={`/categoria/${cat.slug}`}
+              className="flex flex-col items-center gap-2 p-3 rounded-xl bg-[#F5F5F5] hover:bg-[#C4813A] hover:text-white group transition-colors text-center"
+            >
+              <span className="text-2xl">{(cat as any).emoji ?? '📦'}</span>
+              <span className="text-xs font-medium text-[#1A1A1A] group-hover:text-white leading-tight">
+                {cat.nombre}
+              </span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* Productos destacados */}
+      {destacados.length > 0 ? (
+        <section className="max-w-7xl mx-auto px-4 py-6">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-bold text-[#1A1A1A]">Productos destacados</h2>
+            <Link href="/categorias" className="text-sm text-[#C4813A] hover:underline font-medium">
+              Ver todos →
+            </Link>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {destacados.map((p: any) => (
+              <ProductCard key={p.id} producto={p} />
+            ))}
+          </div>
+        </section>
+      ) : (
+        <section className="max-w-7xl mx-auto px-4 py-10 text-center">
+          <div className="bg-[#F5F5F5] rounded-2xl p-12">
+            <span className="text-6xl">📦</span>
+            <h2 className="text-xl font-bold mt-4 mb-2">Los productos vienen en camino</h2>
+            <p className="text-[#6B6B6B] text-sm">
+              Estamos cargando nuestro catálogo. Vuelve pronto.
+            </p>
+          </div>
+        </section>
+      )}
+
+      {/* Banner envío gratis */}
+      <section className="max-w-7xl mx-auto px-4 py-8">
+        <div className="bg-[#C4813A] rounded-2xl p-8 text-white flex flex-col md:flex-row items-center justify-between gap-4">
+          <div>
+            <h3 className="text-lg font-bold mb-1">🚚 Envío gratis en todos tus pedidos</h3>
+            <p className="text-white/80 text-sm">Sin mínimo de compra. Envío estándar a todo México.</p>
+          </div>
+          <Link
+            href="/categorias"
+            className="bg-white text-[#C4813A] font-semibold px-6 py-2.5 rounded-full text-sm hover:bg-white/90 transition-colors whitespace-nowrap"
+          >
+            Comprar ahora
+          </Link>
+        </div>
+      </section>
+    </main>
+  )
 }
