@@ -1,66 +1,52 @@
 export const dynamic = 'force-dynamic'
 
-import { supabase } from '@/lib/supabase'
+import { db, schema } from '@/lib/db'
+import { eq, and, gte, lte, asc, desc } from 'drizzle-orm'
+import { notFound } from 'next/navigation'
 import ProductCard from '@/components/catalog/ProductCard'
 import CategorySidebar from '@/components/catalog/CategorySidebar'
 import Link from 'next/link'
-import { notFound } from 'next/navigation'
 
 interface Props {
   params: Promise<{ slug: string }>
   searchParams: Promise<{ marca?: string; min?: string; max?: string; orden?: string }>
 }
 
-async function getCategoria(slug: string) {
-  const { data } = await supabase
-    .from('categorias')
-    .select('*')
-    .eq('slug', slug)
-    .single()
-  return data
-}
-
-async function getProductos(categoriaId: string, filtros: any) {
-  let query = supabase
-    .from('productos')
-    .select('id, asin, titulo, slug, precio, precio_compare, imagenes, marca, destacado')
-    .eq('activo', true)
-    .eq('categoria_id', categoriaId)
-
-  if (filtros.marca) query = query.eq('marca', filtros.marca)
-  if (filtros.min) query = query.gte('precio', Number(filtros.min))
-  if (filtros.max) query = query.lte('precio', Number(filtros.max))
-
-  if (filtros.orden === 'precio_asc') query = query.order('precio', { ascending: true })
-  else if (filtros.orden === 'precio_desc') query = query.order('precio', { ascending: false })
-  else query = query.order('creado_en', { ascending: false })
-
-  const { data } = await query.limit(48)
-  return data ?? []
-}
-
-async function getMarcas(categoriaId: string) {
-  const { data } = await supabase
-    .from('productos')
-    .select('marca')
-    .eq('activo', true)
-    .eq('categoria_id', categoriaId)
-    .not('marca', 'is', null)
-  const marcas = [...new Set((data ?? []).map((p: any) => p.marca))].filter(Boolean)
-  return marcas as string[]
-}
-
 export default async function CategoriaPage({ params, searchParams }: Props) {
   const { slug } = await params
   const filtros = await searchParams
 
-  const categoria = await getCategoria(slug)
+  const [categoria] = await db.select().from(schema.categorias)
+    .where(eq(schema.categorias.slug, slug))
+    .limit(1)
+
   if (!categoria) notFound()
 
-  const [productos, marcas] = await Promise.all([
-    getProductos(categoria.id, filtros),
-    getMarcas(categoria.id),
-  ])
+  // Construir condiciones de filtro
+  const condiciones: any[] = [
+    eq(schema.productos.activo, true),
+    eq(schema.productos.categoriaId, categoria.id),
+  ]
+  if (filtros.marca) condiciones.push(eq(schema.productos.marca, filtros.marca))
+  if (filtros.min)   condiciones.push(gte(schema.productos.precio, filtros.min))
+  if (filtros.max)   condiciones.push(lte(schema.productos.precio, filtros.max))
+
+  const ordenCol = filtros.orden === 'precio_asc'  ? asc(schema.productos.precio)
+                 : filtros.orden === 'precio_desc' ? desc(schema.productos.precio)
+                 : desc(schema.productos.creadoEn)
+
+  const productos = await db.select().from(schema.productos)
+    .where(and(...condiciones))
+    .orderBy(ordenCol)
+    .limit(48)
+
+  // Marcas disponibles en la categoría
+  const todasMarcas = await db.selectDistinct({ marca: schema.productos.marca })
+    .from(schema.productos)
+    .where(and(eq(schema.productos.activo, true), eq(schema.productos.categoriaId, categoria.id)))
+  const marcas = todasMarcas.map(r => r.marca).filter(Boolean) as string[]
+
+  const hayFiltros = !!(filtros.marca || filtros.min || filtros.max)
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
@@ -74,19 +60,17 @@ export default async function CategoriaPage({ params, searchParams }: Props) {
       <h1 className="text-2xl font-bold text-[#1A1A1A] mb-6">{categoria.nombre}</h1>
 
       <div className="flex gap-6">
-        {/* Sidebar filtros */}
         <aside className="hidden md:block w-56 flex-shrink-0">
           <CategorySidebar marcas={marcas} filtrosActivos={filtros} />
         </aside>
 
-        {/* Grid de productos */}
         <div className="flex-1">
-          {/* Toolbar */}
           <div className="flex items-center justify-between mb-4">
             <p className="text-sm text-[#6B6B6B]">
               {productos.length} {productos.length === 1 ? 'producto' : 'productos'}
+              {hayFiltros && <span className="ml-2 text-[#C4813A]">· filtros activos</span>}
             </p>
-            <OrdenSelect valorActual={filtros.orden} />
+            <OrdenSelect valorActual={filtros.orden} slug={slug} />
           </div>
 
           {productos.length === 0 ? (
@@ -99,9 +83,7 @@ export default async function CategoriaPage({ params, searchParams }: Props) {
             </div>
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {productos.map((p: any) => (
-                <ProductCard key={p.id} producto={p} />
-              ))}
+              {productos.map((p: any) => <ProductCard key={p.id} producto={p} />)}
             </div>
           )}
         </div>
@@ -110,23 +92,15 @@ export default async function CategoriaPage({ params, searchParams }: Props) {
   )
 }
 
-function OrdenSelect({ valorActual }: { valorActual?: string }) {
+function OrdenSelect({ valorActual, slug }: { valorActual?: string; slug: string }) {
   return (
-    <form>
-      <select
-        name="orden"
-        defaultValue={valorActual ?? ''}
-        onChange={(e) => {
-          const url = new URL(window.location.href)
-          url.searchParams.set('orden', e.target.value)
-          window.location.href = url.toString()
-        }}
-        className="text-sm border border-[#E0E0E0] rounded-lg px-3 py-1.5 text-[#1A1A1A] focus:outline-none focus:border-[#C4813A]"
-      >
-        <option value="">Más recientes</option>
-        <option value="precio_asc">Precio: menor a mayor</option>
-        <option value="precio_desc">Precio: mayor a menor</option>
-      </select>
-    </form>
+    <select
+      defaultValue={valorActual ?? ''}
+      className="text-sm border border-[#E0E0E0] rounded-lg px-3 py-1.5 text-[#1A1A1A] focus:outline-none focus:border-[#C4813A]"
+    >
+      <option value="">Más recientes</option>
+      <option value="precio_asc">Precio: menor a mayor</option>
+      <option value="precio_desc">Precio: mayor a menor</option>
+    </select>
   )
 }

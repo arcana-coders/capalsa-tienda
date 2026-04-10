@@ -1,39 +1,36 @@
 export const dynamic = 'force-dynamic'
 
 import Link from 'next/link'
-import { supabase } from '@/lib/supabase'
+import { db, schema } from '@/lib/db'
+import { eq, isNull, and } from 'drizzle-orm'
 import ProductCard from '@/components/catalog/ProductCard'
 
 async function getDestacados() {
-  const { data } = await supabase
-    .from('productos')
-    .select('id, asin, titulo, slug, precio, precio_compare, imagenes, marca, destacado')
-    .eq('activo', true)
-    .eq('destacado', true)
-    .limit(8)
-  return data ?? []
+  try {
+    return await db.select().from(schema.productos)
+      .where(and(eq(schema.productos.activo, true), eq(schema.productos.destacado, true)))
+      .limit(8)
+  } catch { return [] }
 }
 
 async function getCategorias() {
-  const { data } = await supabase
-    .from('categorias')
-    .select('id, nombre, slug, imagen_url')
-    .eq('activa', true)
-    .is('padre_id', null)
-    .order('orden')
-    .limit(8)
-  return data ?? []
+  try {
+    return await db.select().from(schema.categorias)
+      .where(and(eq(schema.categorias.activa, true), isNull(schema.categorias.padreId)))
+      .orderBy(schema.categorias.orden)
+      .limit(8)
+  } catch { return [] }
 }
 
 const CATEGORIAS_FALLBACK = [
   { id: '1', nombre: 'Herramientas', slug: 'herramientas', emoji: '🔧' },
-  { id: '2', nombre: 'Hogar', slug: 'hogar', emoji: '🏠' },
-  { id: '3', nombre: 'Electrónica', slug: 'electronica', emoji: '💡' },
-  { id: '4', nombre: 'Deportes', slug: 'deportes', emoji: '⚽' },
-  { id: '5', nombre: 'Jardinería', slug: 'jardineria', emoji: '🌿' },
-  { id: '6', nombre: 'Oficina', slug: 'oficina', emoji: '💼' },
-  { id: '7', nombre: 'Automotriz', slug: 'automotriz', emoji: '🚗' },
-  { id: '8', nombre: 'Bebés', slug: 'bebes', emoji: '🍼' },
+  { id: '2', nombre: 'Hogar',        slug: 'hogar',        emoji: '🏠' },
+  { id: '3', nombre: 'Electrónica',  slug: 'electronica',  emoji: '💡' },
+  { id: '4', nombre: 'Deportes',     slug: 'deportes',     emoji: '⚽' },
+  { id: '5', nombre: 'Jardinería',   slug: 'jardineria',   emoji: '🌿' },
+  { id: '6', nombre: 'Oficina',      slug: 'oficina',      emoji: '💼' },
+  { id: '7', nombre: 'Automotriz',   slug: 'automotriz',   emoji: '🚗' },
+  { id: '8', nombre: 'Bebés',        slug: 'bebes',        emoji: '🍼' },
 ]
 
 export default async function HomePage() {
@@ -54,10 +51,7 @@ export default async function HomePage() {
           <p className="text-white/70 text-base mb-8 max-w-xl mx-auto">
             Miles de productos seleccionados para ti. Herramientas, hogar, electrónica y mucho más.
           </p>
-          <Link
-            href="/categorias"
-            className="inline-block bg-[#C4813A] hover:bg-[#A36A28] text-white font-semibold px-8 py-3 rounded-full transition-colors text-sm"
-          >
+          <Link href="/categorias" className="inline-block bg-[#C4813A] hover:bg-[#A36A28] text-white font-semibold px-8 py-3 rounded-full transition-colors text-sm">
             Ver todo el catálogo
           </Link>
         </div>
@@ -68,15 +62,10 @@ export default async function HomePage() {
         <h2 className="text-xl font-bold text-[#1A1A1A] mb-6">Comprar por categoría</h2>
         <div className="grid grid-cols-4 md:grid-cols-8 gap-3">
           {cats.map((cat: any) => (
-            <Link
-              key={cat.id}
-              href={`/categoria/${cat.slug}`}
-              className="flex flex-col items-center gap-2 p-3 rounded-xl bg-[#F5F5F5] hover:bg-[#C4813A] hover:text-white group transition-colors text-center"
-            >
-              <span className="text-2xl">{(cat as any).emoji ?? '📦'}</span>
-              <span className="text-xs font-medium text-[#1A1A1A] group-hover:text-white leading-tight">
-                {cat.nombre}
-              </span>
+            <Link key={cat.id} href={`/categoria/${cat.slug}`}
+              className="flex flex-col items-center gap-2 p-3 rounded-xl bg-[#F5F5F5] hover:bg-[#C4813A] hover:text-white group transition-colors text-center">
+              <span className="text-2xl">{cat.emoji ?? '📦'}</span>
+              <span className="text-xs font-medium text-[#1A1A1A] group-hover:text-white leading-tight">{cat.nombre}</span>
             </Link>
           ))}
         </div>
@@ -87,14 +76,10 @@ export default async function HomePage() {
         <section className="max-w-7xl mx-auto px-4 py-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-bold text-[#1A1A1A]">Productos destacados</h2>
-            <Link href="/categorias" className="text-sm text-[#C4813A] hover:underline font-medium">
-              Ver todos →
-            </Link>
+            <Link href="/categorias" className="text-sm text-[#C4813A] hover:underline font-medium">Ver todos →</Link>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {destacados.map((p: any) => (
-              <ProductCard key={p.id} producto={p} />
-            ))}
+            {destacados.map((p: any) => <ProductCard key={p.id} producto={p} />)}
           </div>
         </section>
       ) : (
@@ -102,9 +87,7 @@ export default async function HomePage() {
           <div className="bg-[#F5F5F5] rounded-2xl p-12">
             <span className="text-6xl">📦</span>
             <h2 className="text-xl font-bold mt-4 mb-2">Los productos vienen en camino</h2>
-            <p className="text-[#6B6B6B] text-sm">
-              Estamos cargando nuestro catálogo. Vuelve pronto.
-            </p>
+            <p className="text-[#6B6B6B] text-sm">Estamos cargando nuestro catálogo. Vuelve pronto.</p>
           </div>
         </section>
       )}
@@ -116,10 +99,7 @@ export default async function HomePage() {
             <h3 className="text-lg font-bold mb-1">🚚 Envío gratis en todos tus pedidos</h3>
             <p className="text-white/80 text-sm">Sin mínimo de compra. Envío estándar a todo México.</p>
           </div>
-          <Link
-            href="/categorias"
-            className="bg-white text-[#C4813A] font-semibold px-6 py-2.5 rounded-full text-sm hover:bg-white/90 transition-colors whitespace-nowrap"
-          >
+          <Link href="/categorias" className="bg-white text-[#C4813A] font-semibold px-6 py-2.5 rounded-full text-sm hover:bg-white/90 transition-colors whitespace-nowrap">
             Comprar ahora
           </Link>
         </div>

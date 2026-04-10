@@ -1,6 +1,7 @@
 export const dynamic = 'force-dynamic'
 
-import { supabase } from '@/lib/supabase'
+import { db, schema } from '@/lib/db'
+import { eq, and, ilike } from 'drizzle-orm'
 import ProductCard from '@/components/catalog/ProductCard'
 import Link from 'next/link'
 
@@ -8,21 +9,15 @@ interface Props {
   searchParams: Promise<{ q?: string }>
 }
 
-async function buscarProductos(query: string) {
-  const { data } = await supabase
-    .from('productos')
-    .select('id, asin, titulo, slug, precio, precio_compare, imagenes, marca, destacado')
-    .eq('activo', true)
-    .ilike('titulo', `%${query}%`)
-    .limit(48)
-  return data ?? []
-}
-
 export default async function BuscarPage({ searchParams }: Props) {
   const { q = '' } = await searchParams
   const query = q.trim()
 
-  const productos = query ? await buscarProductos(query) : []
+  const productos = query
+    ? await db.select().from(schema.productos)
+        .where(and(eq(schema.productos.activo, true), ilike(schema.productos.titulo, `%${query}%`)))
+        .limit(48)
+    : []
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
@@ -42,7 +37,7 @@ export default async function BuscarPage({ searchParams }: Props) {
       )}
 
       {!query && (
-        <p className="text-[#6B6B6B] mt-6">Ingresa un término de búsqueda en la barra de arriba.</p>
+        <p className="text-[#6B6B6B] mt-6">Ingresa un término en la barra de búsqueda.</p>
       )}
 
       {query && productos.length === 0 && (
@@ -58,9 +53,7 @@ export default async function BuscarPage({ searchParams }: Props) {
 
       {productos.length > 0 && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {productos.map((p: any) => (
-            <ProductCard key={p.id} producto={p} />
-          ))}
+          {productos.map((p: any) => <ProductCard key={p.id} producto={p} />)}
         </div>
       )}
     </div>
