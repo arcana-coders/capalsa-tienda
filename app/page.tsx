@@ -1,5 +1,6 @@
 export const dynamic = 'force-dynamic'
 
+import React from 'react'
 import Link from 'next/link'
 import { db, schema } from '@/lib/db'
 import { eq, isNull, and, sql } from 'drizzle-orm'
@@ -10,10 +11,20 @@ import OfertasDelDia from '@/components/home/OfertasDelDia'
 
 async function getDestacados() {
   try {
-    return await db.select().from(schema.productos)
+    const rows = await db.select().from(schema.productos)
       .where(and(eq(schema.productos.activo, true), eq(schema.productos.destacado, true)))
       .orderBy(sql`RANDOM()`)
       .limit(12)
+    return rows.map(p => ({
+      ...p,
+      precio: Number(p.precio),
+      precioCompare: p.precioCompare ? Number(p.precioCompare) : undefined,
+      imagenes: (p.imagenes as string[]) ?? [],
+      marca: p.marca ?? undefined,
+      asin: p.asin ?? undefined,
+      descripcion: p.descripcion ?? undefined,
+      categoriaId: p.categoriaId ?? undefined,
+    }))
   } catch { return [] }
 }
 
@@ -27,7 +38,7 @@ async function getCategorias() {
 }
 
 // SVG icons para categorías
-const CatIcons: Record<string, () => JSX.Element> = {
+const CatIcons: Record<string, () => React.ReactElement> = {
   herramientas: () => (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
       <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>

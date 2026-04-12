@@ -1,16 +1,21 @@
 import { Resend } from 'resend';
 import OrderConfirmationEmail from '@/emails/OrderConfirmation';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
-export async function sendOrderConfirmation({ 
-  email, 
-  orderNumber, 
-  customerName, 
-  items, 
-  total, 
-  address 
+export async function sendOrderConfirmation({
+  email,
+  orderNumber,
+  customerName,
+  items,
+  total,
+  address
 }: any) {
+  if (!process.env.RESEND_API_KEY) {
+    console.warn('RESEND_API_KEY no configurada — email omitido');
+    return { success: false };
+  }
+
+  const resend = new Resend(process.env.RESEND_API_KEY);
+
   try {
     const data = await resend.emails.send({
       from: 'Capalsa <contacto@capalsa.com>',

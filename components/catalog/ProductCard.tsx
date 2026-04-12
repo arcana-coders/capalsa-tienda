@@ -6,7 +6,7 @@ import { useState } from 'react'
 
 interface Product {
   id: string
-  asin: string
+  asin?: string | null
   titulo: string
   slug: string
   precio: number
