@@ -26,19 +26,15 @@ export default function CheckoutPage() {
     referencias: ''
   })
 
-  // Esperar a que Zustand termine de leer localStorage
   useEffect(() => {
-    if (useCartStore.persist.hasHydrated()) {
-      setIsHydrated(true)
-    } else {
-      const unsub = useCartStore.persist.onFinishHydration(() => {
-        setIsHydrated(true)
-      })
-      return unsub
-    }
+    setIsHydrated(true)
   }, [])
 
-  if (!isHydrated) return null
+  if (!isHydrated) return (
+    <main className="min-h-screen bg-[#fbf9f8] flex items-center justify-center">
+      <div className="w-8 h-8 border-4 border-[#00386c] border-t-transparent rounded-full animate-spin" />
+    </main>
+  )
 
   if (items.length === 0) {
     return (
