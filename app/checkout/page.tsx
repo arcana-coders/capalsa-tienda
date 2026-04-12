@@ -26,9 +26,16 @@ export default function CheckoutPage() {
     referencias: ''
   })
 
-  // Evitar problemas de hidratación con Zustand persist
+  // Esperar a que Zustand termine de leer localStorage
   useEffect(() => {
-    setIsHydrated(true)
+    if (useCartStore.persist.hasHydrated()) {
+      setIsHydrated(true)
+    } else {
+      const unsub = useCartStore.persist.onFinishHydration(() => {
+        setIsHydrated(true)
+      })
+      return unsub
+    }
   }, [])
 
   if (!isHydrated) return null
