@@ -30,7 +30,7 @@ export async function POST(request: Request) {
     const order = await createPayPalOrder(items, total);
 
     return NextResponse.json(order);
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error creando orden de PayPal:', error);
     return NextResponse.json({ error: 'Fallo al crear la orden' }, { status: 500 });
   }

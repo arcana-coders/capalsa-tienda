@@ -33,7 +33,7 @@ export async function POST(request: Request) {
       success: true, 
       message: '¡Gracias por suscribirte!' 
     })
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error en API de newsletter:', error)
     return NextResponse.json(
       { error: 'No se pudo completar la suscripción. Intenta de nuevo.' }, 

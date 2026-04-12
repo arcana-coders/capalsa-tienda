@@ -7,7 +7,7 @@ import { sendOrderConfirmation } from '@/lib/resend-utils';
 
 export async function POST(request: Request) {
   try {
-    const { orderID, clienteData } = await request.json();
+    const { orderID, clienteData, items, total } = await request.json();
 
     if (!orderID) {
       return NextResponse.json({ error: 'Falta ID de orden' }, { status: 400 });
@@ -15,58 +15,59 @@ export async function POST(request: Request) {
 
     const captureData = await capturePayPalOrder(orderID);
 
-      // 1. Guardar en Base de Datos
-      await db.insert(ordenes).values({
-        numeroOrden,
-        clienteNombre: clienteData.nombre,
-        clienteEmail: clienteData.email,
-        clienteTelefono: clienteData.telefono,
-        clienteDireccion: {
-          calle: clienteData.calle,
-          numExt: clienteData.numExt,
-          numInt: clienteData.numInt,
-          colonia: clienteData.colonia,
-          ciudad: clienteData.ciudad,
-          estado: clienteData.estado,
-          cp: clienteData.cp,
-          referencias: clienteData.referencias
-        },
-        items: purchaseUnit.items || [],
-        subtotal: amount.value,
-        total: amount.value,
-        metodoPago: 'paypal',
-        pagoId: captureData.id,
-        pagoEstado: 'pagado',
-        notas: `PayPal Capture ID: ${captureData.purchase_units[0].payments.captures[0].id}`
-      });
-
-      // 2. Enviar Email de Confirmación (asíncrono, no bloqueante)
-      // Capturamos el error internamente para no romper la respuesta de éxito
-      try {
-        await sendOrderConfirmation({
-          email: clienteData.email,
-          orderNumber: numeroOrden,
-          customerName: clienteData.nombre,
-          items: purchaseUnit.items || [],
-          total: amount.value,
-          address: {
-            calle: clienteData.calle,
-            colonia: clienteData.colonia,
-            ciudad: clienteData.ciudad,
-            estado: clienteData.estado,
-            cp: clienteData.cp
-          }
-        });
-      } catch (emailError) {
-        console.error('Error al intentar enviar el email:', emailError);
-      }
-
-      // Retornamos también el número de orden para mostrarlo en la página de éxito
-      return NextResponse.json({ ...captureData, numeroOrden });
+    if (captureData.status !== 'COMPLETED') {
+      return NextResponse.json({ error: 'Pago no completado', detail: captureData }, { status: 400 });
     }
-    
-    return NextResponse.json(captureData);
-  } catch (error: any) {
+
+    const numeroOrden = `CAP-${nanoid(8).toUpperCase()}`;
+    const captureId = captureData.purchase_units?.[0]?.payments?.captures?.[0]?.id ?? orderID;
+
+    await db.insert(ordenes).values({
+      numeroOrden,
+      clienteNombre: clienteData?.nombre ?? '',
+      clienteEmail: clienteData?.email ?? '',
+      clienteTelefono: clienteData?.telefono ?? '',
+      clienteDireccion: {
+        calle: clienteData?.calle ?? '',
+        numExt: clienteData?.numExt ?? '',
+        numInt: clienteData?.numInt ?? '',
+        colonia: clienteData?.colonia ?? '',
+        ciudad: clienteData?.ciudad ?? '',
+        estado: clienteData?.estado ?? '',
+        cp: clienteData?.cp ?? '',
+        referencias: clienteData?.referencias ?? '',
+      },
+      items: items ?? [],
+      subtotal: String(total ?? 0),
+      total: String(total ?? 0),
+      metodoPago: 'paypal',
+      pagoId: captureData.id,
+      pagoEstado: 'pagado',
+      notas: `PayPal Capture ID: ${captureId}`,
+    });
+
+    // Email de confirmación — no bloqueante
+    try {
+      await sendOrderConfirmation({
+        email: clienteData?.email,
+        orderNumber: numeroOrden,
+        customerName: clienteData?.nombre,
+        items: items ?? [],
+        total: String(total ?? 0),
+        address: {
+          calle: clienteData?.calle,
+          colonia: clienteData?.colonia,
+          ciudad: clienteData?.ciudad,
+          estado: clienteData?.estado,
+          cp: clienteData?.cp,
+        },
+      });
+    } catch (emailError) {
+      console.error('Error enviando email de confirmación:', emailError);
+    }
+
+    return NextResponse.json({ ...captureData, numeroOrden });
+  } catch (error) {
     console.error('Error capturando orden de PayPal:', error);
     return NextResponse.json({ error: 'Fallo al capturar el pago' }, { status: 500 });
   }

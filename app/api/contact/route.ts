@@ -28,7 +28,7 @@ export async function POST(request: Request) {
       success: true, 
       message: 'Mensaje recibido correctamente. Nos pondremos en contacto contigo pronto.' 
     })
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error en API de contacto:', error)
     return NextResponse.json(
       { error: 'Hubo un error al procesar tu mensaje. Por favor intenta de nuevo.' }, 
