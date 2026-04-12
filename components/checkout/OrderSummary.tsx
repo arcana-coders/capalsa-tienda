@@ -35,7 +35,7 @@ export default function OrderSummary({ paymentMethod, setPaymentMethod, clienteD
 
   return (
     <PayPalScriptProvider options={initialOptions}>
-      <div className="bg-white rounded-[2.5rem] p-8 md:p-10 shadow-[0_15px_40px_-15px_rgba(0,56,108,0.08)] border border-[#c4c8ce]/20 sticky top-24">
+      <div className="bg-white rounded-[2.5rem] p-8 md:p-10 shadow-[0_15px_40px_-15px_rgba(0,56,108,0.08)] border border-[#c4c8ce]/20 sticky top-6 max-h-[calc(100vh-3rem)] overflow-y-auto">
         <h2 className="text-2xl font-black text-[#1b1c1c] mb-8 tracking-tight" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
           Resumen de Compra
         </h2>
@@ -105,7 +105,7 @@ export default function OrderSummary({ paymentMethod, setPaymentMethod, clienteD
         {/* Botones de Acción */}
         <div className="mt-8">
           {paymentMethod === 'paypal' ? (
-            <div className="relative z-0">
+            <div className="relative">
               <PayPalButtons
                 style={{ 
                   layout: "vertical", 
