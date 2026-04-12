@@ -7,6 +7,29 @@ import ProductImages from '@/components/product/ProductImages'
 import ProductInfo from '@/components/product/ProductInfo'
 import Link from 'next/link'
 
+/**
+ * Limpia el campo descripcion de Amazon:
+ * - Elimina etiquetas HTML (descripcion a veces es HTML de secciones A+)
+ * - Decodifica entidades HTML básicas
+ * - Colapsa espacios/saltos múltiples
+ * Retorna null si el resultado es vacío (para no mostrar la sección).
+ */
+function cleanDescription(raw: string | null | undefined): string | null {
+  if (!raw) return null
+  const clean = raw
+    .replace(/<[^>]*>/g, ' ')          // quita tags HTML
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&nbsp;/g, ' ')
+    .replace(/[ \t]+/g, ' ')           // colapsa espacios
+    .replace(/\n{3,}/g, '\n\n')        // máx 2 saltos seguidos
+    .trim()
+  return clean.length > 10 ? clean : null
+}
+
 interface Props {
   params: Promise<{ slug: string }>
 }
@@ -55,16 +78,49 @@ export default async function ProductoPage({ params }: Props) {
       </nav>
 
       {/* Producto principal */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
         <ProductImages imagenes={(producto.imagenes as string[]) ?? []} titulo={producto.titulo} />
         <ProductInfo producto={producto as any} />
       </div>
 
-      {/* Descripción */}
-      {producto.descripcion && (
+      {/* Descripción — se limpia el HTML antes de mostrar */}
+      {cleanDescription(producto.descripcion) && (
         <div className="mt-12 border-t border-[#E0E0E0] pt-8">
           <h2 className="text-lg font-bold text-[#1A1A1A] mb-4">Descripción del producto</h2>
-          <p className="text-sm text-[#6B6B6B] leading-relaxed whitespace-pre-line max-w-3xl">{producto.descripcion}</p>
+          <p className="text-sm text-[#6B6B6B] leading-relaxed whitespace-pre-line max-w-3xl">
+            {cleanDescription(producto.descripcion)!.replace(/\bAmazon\.com\b/gi, 'Capalsa').replace(/\bAmazon\b/gi, 'Capalsa')}
+          </p>
+        </div>
+      )}
+
+      {/* Reviews */}
+      {Array.isArray(producto.reviews) && (producto.reviews as any[]).length > 0 && (
+        <div className="mt-12 border-t border-[#E0E0E0] pt-8">
+          <h2 className="text-lg font-bold text-[#1A1A1A] mb-6">Opiniones de clientes</h2>
+          <div className="flex flex-col gap-6 max-w-3xl">
+            {(producto.reviews as { autor: string; titulo: string; texto: string; fecha: string }[]).map((r, i) => (
+              <div key={i} className="bg-[#F9F9F9] border border-[#E0E0E0] rounded-xl p-5">
+                {/* Estrellas */}
+                <div className="flex items-center gap-1 mb-2">
+                  {[1,2,3,4,5].map(s => (
+                    <svg key={s} className="w-4 h-4 text-[#F4A81D]" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                    </svg>
+                  ))}
+                </div>
+                {/* Título */}
+                {r.titulo && (
+                  <p className="text-sm font-semibold text-[#1A1A1A] mb-1">{r.titulo}</p>
+                )}
+                {/* Texto */}
+                <p className="text-sm text-[#444] leading-relaxed">{r.texto}</p>
+                {/* Autor + fecha */}
+                <p className="text-xs text-[#9B9B9B] mt-3">
+                  {r.autor}{r.fecha ? ` · ${r.fecha}` : ''}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
       )}
 

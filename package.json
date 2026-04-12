@@ -15,12 +15,18 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1028.0",
     "@neondatabase/serverless": "^1.0.2",
+    "@paypal/react-paypal-js": "^9.1.1",
+    "@react-email/components": "^1.0.12",
     "@supabase/supabase-js": "^2.103.0",
     "drizzle-kit": "^0.31.10",
     "drizzle-orm": "^0.45.2",
+    "gsap": "^3.14.2",
+    "nanoid": "^5.1.7",
     "next": "16.2.3",
     "react": "19.2.4",
     "react-dom": "19.2.4",
+    "react-email": "^5.2.10",
+    "resend": "^6.10.0",
     "zustand": "^5.0.12"
   },
   "devDependencies": {

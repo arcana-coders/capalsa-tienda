@@ -1,0 +1,79 @@
+/**
+ * Utilidades de servidor para integración con PayPal REST API v2
+ */
+
+const PAYPAL_CLIENT_ID = process.env.PAYPAL_CLIENT_ID;
+const PAYPAL_CLIENT_SECRET = process.env.PAYPAL_CLIENT_SECRET;
+const BASE_URL = process.env.NODE_ENV === 'production' 
+  ? 'https://api-m.paypal.com' 
+  : 'https://api-m.sandbox.paypal.com';
+
+/**
+ * Obtiene el token de acceso OAuth2 para llamadas a la API
+ */
+export async function getPayPalAccessToken() {
+  if (!PAYPAL_CLIENT_ID || !PAYPAL_CLIENT_SECRET) {
+    throw new Error('Faltan credenciales de PayPal en .env.local');
+  }
+
+  const auth = Buffer.from(`${PAYPAL_CLIENT_ID}:${PAYPAL_CLIENT_SECRET}`).toString('base64');
+  
+  const response = await fetch(`${BASE_URL}/v1/oauth2/token`, {
+    method: 'POST',
+    body: 'grant_type=client_credentials',
+    headers: {
+      Authorization: `Basic ${auth}`,
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    cache: 'no-store', // No queremos cachear el token
+  });
+
+  const data = await response.json();
+  return data.access_token;
+}
+
+/**
+ * Crea una orden en PayPal
+ */
+export async function createPayPalOrder(items: any[], subtotal: number) {
+  const accessToken = await getPayPalAccessToken();
+
+  const response = await fetch(`${BASE_URL}/v2/checkout/orders`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${accessToken}`,
+    },
+    body: JSON.stringify({
+      intent: 'CAPTURE',
+      purchase_units: [
+        {
+          amount: {
+            currency_code: 'MXN',
+            value: subtotal.toFixed(2),
+          },
+          // Podríamos agregar item_list aquí para que el detalle aparezca en PayPal
+        },
+      ],
+    }),
+  });
+
+  return await response.json();
+}
+
+/**
+ * Captura un pago aprobado
+ */
+export async function capturePayPalOrder(orderId: string) {
+  const accessToken = await getPayPalAccessToken();
+
+  const response = await fetch(`${BASE_URL}/v2/checkout/orders/${orderId}/capture`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
+  return await response.json();
+}

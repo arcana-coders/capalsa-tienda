@@ -1,36 +1,66 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-background: #ffffff;
-  --color-foreground: #1A1A1A;
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* ── Surfaces ── */
+  --color-surface:          #fbf9f8;
+  --color-surface-low:      #f5f3f3;
+  --color-surface-lowest:   #ffffff;
+  --color-background:       #fbf9f8;
+  --color-foreground:       #1b1c1c;
 
-  /* CAPALSA Brand */
-  --color-brand: #C4813A;
-  --color-brand-dark: #A36A28;
-  --color-brand-light: #E09A50;
-  --color-dark: #1A1A1A;
-  --color-gray-soft: #F5F5F5;
-  --color-gray-mid: #6B6B6B;
-  --color-gray-border: #E0E0E0;
+  /* ── Primary — Azul Profundo ── */
+  --color-primary:          #00386c;
+  --color-primary-container:#1a4f8b;
+  --color-on-primary:       #ffffff;
+
+  /* ── Secondary — Sage Verde ── */
+  --color-secondary:        #43673c;
+  --color-secondary-container: #c1ebb5;
+  --color-on-secondary-container: #0f2b0b;
+
+  /* ── Tertiary — CTA Naranja Arcilla ── */
+  --color-tertiary:         #582d00;
+  --color-tertiary-container: #794000;
+  --color-on-tertiary:      #ffffff;
+
+  /* ── Neutral ── */
+  --color-on-surface:       #1b1c1c;
+  --color-on-surface-variant: #44494e;
+  --color-outline:          #74787e;
+  --color-outline-variant:  #c4c8ce;
+}
+
+/* ─── Base ─── */
+html {
+  background: var(--color-surface);
+  color: var(--color-on-surface);
+  -webkit-font-smoothing: antialiased;
 }
 
 body {
-  background: var(--color-background);
-  color: var(--color-foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-surface);
+  color: var(--color-on-surface);
+  font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
 }
 
 * {
   box-sizing: border-box;
 }
 
-/* Cart drawer animation */
+/* ─── Cart drawer animation ─── */
 .cart-drawer-enter {
   transform: translateX(100%);
 }
 .cart-drawer-enter-active {
   transform: translateX(0);
   transition: transform 300ms ease-in-out;
+}
+
+/* ─── Scrollbar hide for horizontal scroll ─── */
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
 }

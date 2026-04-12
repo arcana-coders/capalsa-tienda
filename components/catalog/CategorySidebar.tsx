@@ -21,23 +21,27 @@ export default function CategorySidebar({ marcas, filtrosActivos }: Props) {
 
   const limpiar = () => router.push(pathname)
 
-  const hayFiltros = filtrosActivos.marca || filtrosActivos.min || filtrosActivos.max
+  const hayFiltros = !!(filtrosActivos.marca || filtrosActivos.min || filtrosActivos.max)
 
   return (
-    <div className="space-y-6">
-      {hayFiltros && (
-        <button
-          onClick={limpiar}
-          className="text-xs text-[#C4813A] hover:underline font-medium"
-        >
-          ✕ Limpiar filtros
-        </button>
-      )}
+    <div className="space-y-8">
+      {/* Header Sidebar */}
+      <div className="flex items-center justify-between pb-4 border-b border-[#c4c8ce]/20">
+        <h3 className="text-xs font-black text-[#1b1c1c] uppercase tracking-[0.2em]">Filtros</h3>
+        {hayFiltros && (
+          <button
+            onClick={limpiar}
+            className="text-[10px] font-bold text-[#582d00] hover:text-[#00386c] uppercase tracking-wider transition-colors"
+          >
+            Limpiar todo
+          </button>
+        )}
+      </div>
 
-      {/* Precio */}
-      <div>
-        <h3 className="text-sm font-bold text-[#1A1A1A] mb-3">Precio</h3>
-        <div className="space-y-2">
+      {/* Precio Section */}
+      <div className="space-y-4">
+        <h4 className="text-[11px] font-black text-[#00386c] uppercase tracking-widest">Rango de Precio</h4>
+        <div className="space-y-1.5 font-medium">
           {[
             { label: 'Menos de $500', min: '', max: '500' },
             { label: '$500 – $1,000', min: '500', max: '1000' },
@@ -62,37 +66,47 @@ export default function CategorySidebar({ marcas, filtrosActivos }: Props) {
                   }
                   router.push(`${pathname}?${params.toString()}`)
                 }}
-                className={`block w-full text-left text-sm px-3 py-1.5 rounded-lg transition-colors ${
+                className={`group flex items-center justify-between w-full text-left text-xs px-3 py-2.5 rounded-xl transition-all ${
                   activo
-                    ? 'bg-[#C4813A] text-white font-medium'
-                    : 'text-[#1A1A1A] hover:bg-[#F5F5F5]'
+                    ? 'bg-[#00386c] text-white shadow-md'
+                    : 'text-[#44494e] hover:bg-[#f5f3f3] bg-white border border-transparent hover:border-[#c4c8ce]/20'
                 }`}
               >
-                {rango.label}
+                <span>{rango.label}</span>
+                {activo && (
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                )}
               </button>
             )
           })}
         </div>
       </div>
 
-      {/* Marcas */}
+      {/* Marcas Section */}
       {marcas.length > 0 && (
-        <div>
-          <h3 className="text-sm font-bold text-[#1A1A1A] mb-3">Marca</h3>
-          <div className="space-y-1">
-            {marcas.map((marca) => (
+        <div className="space-y-4 pt-2">
+          <h4 className="text-[11px] font-black text-[#00386c] uppercase tracking-widest">Marca</h4>
+          <div className="space-y-1.5 font-medium max-h-[300px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-[#c4c8ce] scrollbar-track-transparent">
+            {marcas.sort().map((marca) => (
               <button
                 key={marca}
                 onClick={() =>
                   setFiltro('marca', filtrosActivos.marca === marca ? null : marca)
                 }
-                className={`block w-full text-left text-sm px-3 py-1.5 rounded-lg transition-colors ${
+                className={`group flex items-center justify-between w-full text-left text-xs px-3 py-2.5 rounded-xl transition-all ${
                   filtrosActivos.marca === marca
-                    ? 'bg-[#C4813A] text-white font-medium'
-                    : 'text-[#1A1A1A] hover:bg-[#F5F5F5]'
+                    ? 'bg-[#00386c] text-white shadow-md'
+                    : 'text-[#44494e] hover:bg-[#f5f3f3] bg-white border border-transparent hover:border-[#c4c8ce]/20'
                 }`}
               >
-                {marca}
+                <span className="truncate">{marca}</span>
+                {filtrosActivos.marca === marca && (
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                )}
               </button>
             ))}
           </div>
