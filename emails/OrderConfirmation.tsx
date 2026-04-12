@@ -101,7 +101,7 @@ export const OrderConfirmationEmail = ({
                 Si tienes dudas sobre tu pedido, contáctanos a{" "}
                 <Link href="mailto:contacto@capalsa.com" style={link}>
                   contacto@capalsa.com
-                </path>
+                </Link>
               </Text>
               <Text style={footerBrand}>© 2026 Capalsa. Productos originales desde USA.</Text>
             </Section>
