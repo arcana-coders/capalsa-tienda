@@ -1,4 +1,4 @@
-export const dynamic = 'force-dynamic'
+export const revalidate = 600 // Revalidar cada 10 minutos
 
 import React from 'react'
 import Link from 'next/link'
@@ -11,10 +11,22 @@ import OfertasDelDia from '@/components/home/OfertasDelDia'
 
 async function getDestacados() {
   try {
-    const rows = await db.select().from(schema.productos)
+    const rows = await db.select({
+      id: schema.productos.id,
+      titulo: schema.productos.titulo,
+      slug: schema.productos.slug,
+      precio: schema.productos.precio,
+      precioCompare: schema.productos.precioCompare,
+      imagenes: schema.productos.imagenes,
+      marca: schema.productos.marca,
+      asin: schema.productos.asin,
+      categoriaId: schema.productos.categoriaId,
+    })
+      .from(schema.productos)
       .where(and(eq(schema.productos.activo, true), eq(schema.productos.destacado, true)))
       .orderBy(sql`RANDOM()`)
       .limit(12)
+
     return rows.map(p => ({
       ...p,
       precio: Number(p.precio),
@@ -22,19 +34,29 @@ async function getDestacados() {
       imagenes: (p.imagenes as string[]) ?? [],
       marca: p.marca ?? undefined,
       asin: p.asin ?? undefined,
-      descripcion: p.descripcion ?? undefined,
       categoriaId: p.categoriaId ?? undefined,
     }))
-  } catch { return [] }
+  } catch (error) {
+    console.error('Error fetching featured products:', error)
+    return []
+  }
 }
 
 async function getCategorias() {
   try {
-    return await db.select().from(schema.categorias)
+    return await db.select({
+      id: schema.categorias.id,
+      nombre: schema.categorias.nombre,
+      slug: schema.categorias.slug
+    })
+      .from(schema.categorias)
       .where(and(eq(schema.categorias.activa, true), isNull(schema.categorias.padreId)))
       .orderBy(schema.categorias.orden)
       .limit(8)
-  } catch { return [] }
+  } catch (error) {
+    console.error('Error fetching categories for homepage:', error)
+    return []
+  }
 }
 
 // SVG icons para categorías
@@ -240,59 +262,87 @@ export default async function HomePage() {
         </section>
       ) : null}
 
-      {/* 6. Banner editorial — Novedades */}
-      <section className="max-w-7xl mx-auto px-4 py-16">
-        <div className="bg-white rounded-3xl overflow-hidden shadow-sm">
+      {/* 6. Banner Editorial — Diferencial Capalsa */}
+      <section className="max-w-7xl mx-auto px-4 py-16 scroll-mt-20">
+        <div className="bg-[#00386c] rounded-3xl overflow-hidden shadow-2xl">
           <div className="grid grid-cols-1 lg:grid-cols-2">
-            {/* Imagen */}
-            <div className="relative min-h-[280px] bg-[#f0f4f0] p-8 flex items-center justify-center">
-              <div className="absolute inset-0 bg-gradient-to-br from-[#c1ebb5]/30 to-[#43673c]/10" />
-              <div className="relative text-center space-y-2">
-                {/* Ilustración simple SVG */}
-                <svg viewBox="0 0 200 200" className="w-40 h-40 mx-auto" fill="none">
-                  <circle cx="100" cy="100" r="80" fill="#e8f5e3"/>
-                  <rect x="60" y="60" width="80" height="90" rx="8" fill="#43673c" opacity="0.15"/>
-                  <rect x="70" y="50" width="60" height="10" rx="4" fill="#43673c" opacity="0.3"/>
-                  <rect x="75" y="80" width="50" height="8" rx="3" fill="#43673c" opacity="0.5"/>
-                  <rect x="75" y="95" width="40" height="8" rx="3" fill="#43673c" opacity="0.4"/>
-                  <rect x="75" y="110" width="45" height="8" rx="3" fill="#43673c" opacity="0.3"/>
-                  <circle cx="100" cy="145" r="15" fill="#43673c" opacity="0.2"/>
-                  <path d="M92 145l6 6 12-12" stroke="#43673c" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+            {/* Imagen/Ilustración Premium */}
+            <div className="relative min-h-[320px] bg-gradient-to-br from-[#00386c] to-[#1a4f8b] p-8 flex items-center justify-center overflow-hidden">
+              <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
+              <div className="relative">
+                {/* SVG Ilustración Importación Premium */}
+                <svg viewBox="0 0 240 240" className="w-56 h-56 drop-shadow-2xl" fill="none">
+                  {/* Círculo de fondo con efecto aura */}
+                  <circle cx="120" cy="120" r="100" fill="white" fillOpacity="0.05" />
+                  <circle cx="120" cy="120" r="80" stroke="white" strokeOpacity="0.1" strokeWidth="2" strokeDasharray="8 8" />
+                  
+                  {/* Escudo/Sello de Garantía */}
+                  <path d="M120 40c-30 0-60 10-60 10v70c0 40 30 70 60 80 30-10 60-40 60-80v-70s-30-10-60-10z" fill="#43673c" fillOpacity="0.9" />
+                  <path d="M120 45c-28 0-55 10-55 10v65c0 38 27 67 55 75 28-8 55-37 55-75v-65s-27-10-55-10z" stroke="white" strokeOpacity="0.3" strokeWidth="1" />
+                  
+                  {/* Checkmark de Verificado */}
+                  <path d="M100 120l15 15 30-30" stroke="white" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" />
+                  
+                  {/* Íconos de Avión y Destino (Efecto Importación) */}
+                  <g opacity="0.8" className="animate-pulse">
+                    <path d="M60 170c-10 0-10 10-20 10m20-10c0-10 10-10 10-20" stroke="#c1ebb5" strokeWidth="2" strokeLinecap="round" />
+                    <path d="M180 70c-10 0-10 10-20 10m20-10c0-10 10-10 10-20" stroke="#c1ebb5" strokeWidth="2" strokeLinecap="round" />
+                  </g>
                 </svg>
               </div>
             </div>
-            {/* Copy */}
-            <div className="p-10 flex flex-col justify-center space-y-6">
-              <h2
-                className="text-3xl lg:text-4xl font-black text-[#00386c] leading-tight"
-                style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
-              >
-                Novedades para un Hogar Moderno
-              </h2>
-              <p className="text-[#44494e] leading-relaxed">
-                Acabamos de recibir la nueva colección de organizadores y accesorios de limpieza importados. Diseñados para maximizar tu espacio con el estilo práctico que nos caracteriza.
-              </p>
-              <ul className="space-y-3">
-                {['Nuevos organizadores de acrílico', 'Línea de purificadores de aire 2025', 'Iluminación inteligente para cocina'].map(item => (
-                  <li key={item} className="flex items-center gap-2.5 text-sm font-medium text-[#1b1c1c]">
-                    <span className="flex-shrink-0 w-5 h-5 rounded-full bg-[#c1ebb5] flex items-center justify-center">
-                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#43673c" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                        <polyline points="20 6 9 17 4 12"/>
+
+            {/* Texto y CTA */}
+            <div className="p-10 lg:p-14 flex flex-col justify-center space-y-8 bg-white lg:bg-transparent">
+              <div className="space-y-4">
+                <span className="inline-block px-3 py-1 bg-[#c1ebb5] text-[#43673c] text-[10px] font-black uppercase tracking-[0.2em] rounded-full">
+                  Exclusivos USA
+                </span>
+                <h2
+                  className="text-3xl lg:text-5xl font-black text-[#1b1c1c] lg:text-white leading-[1.1]"
+                  style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+                >
+                  Lo mejor del mundo, <br className="hidden md:block" />
+                  <span className="text-[#43673c] lg:text-[#c1ebb5]">directo a tu hogar.</span>
+                </h2>
+                <p className="text-[#44494e] lg:text-blue-50/80 leading-relaxed text-sm lg:text-base max-w-lg">
+                  En Capalsa traemos para ti las novedades de Amazon USA que aún no están en México. Con facturación mexicana deducible y entrega garantizada en tu puerta.
+                </p>
+              </div>
+
+              <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {[
+                  { t: '100% Originales', d: 'Garantía oficial de marca.' },
+                  { t: 'Factura Mexicana', d: 'Deducible y con IVA local.' },
+                  { t: 'Entrega en 7 días', d: 'Rastreo puerta a puerta.' },
+                  { t: 'Catálogo USA', d: 'Acceso a millones de ítems.' },
+                ].map((item) => (
+                  <li key={item.t} className="flex gap-3">
+                    <div className="flex-shrink-0 w-6 h-6 rounded-lg bg-[#f5f3f3] lg:bg-white/10 flex items-center justify-center">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#43673c" strokeWidth="3" className="lg:stroke-[#c1ebb5]">
+                        <polyline points="20 6 9 17 4 12" />
                       </svg>
-                    </span>
-                    {item}
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-bold text-[#1b1c1c] lg:text-white">{item.t}</h4>
+                      <p className="text-[10px] text-[#44494e] lg:text-blue-50/60 leading-tight">{item.d}</p>
+                    </div>
                   </li>
                 ))}
               </ul>
-              <Link
-                href="/categorias"
-                className="inline-flex items-center gap-2 bg-[#00386c] hover:bg-[#1a4f8b] text-white font-bold px-8 py-4 rounded-xl text-sm transition-all duration-200 shadow-md hover:shadow-lg hover:-translate-y-0.5 w-fit"
-              >
-                Ver Colección Nueva
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
-                </svg>
-              </Link>
+
+              <div className="pt-2">
+                <Link
+                  href="/categorias"
+                  className="inline-flex items-center gap-2 bg-[#43673c] hover:bg-[#324f2d] text-white font-black px-10 py-4 rounded-2xl text-sm transition-all duration-300 shadow-xl hover:shadow-[0_20px_50px_rgba(67,103,60,0.3)] hover:-translate-y-1 w-full sm:w-fit text-center justify-center"
+                >
+                  Explorar Catálogo USA
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                    <polyline points="12 5 19 12 12 19" />
+                  </svg>
+                </Link>
+              </div>
             </div>
           </div>
         </div>

@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-lowest": "#ffffff",
+                    "outline": "#737781",
+                    "error-container": "#ffdad6",
+                    "on-tertiary-fixed": "#2f1500",
+                    "tertiary-fixed": "#ffdcc3",
+                    "primary-fixed-dim": "#a6c8ff",
+                    "on-surface": "#1b1c1c",
+                    "secondary-container": "#c1ebb5",
+                    "background": "#fbf9f8",
+                    "inverse-surface": "#303031",
+                    "outline-variant": "#c2c6d1",
+                    "on-secondary-fixed-variant": "#2c4f27",
+                    "surface-container-high": "#e9e8e7",
+                    "surface-variant": "#e4e2e2",
+                    "surface-tint": "#2f5f9c",
+                    "on-tertiary-fixed-variant": "#6e3900",
+                    "tertiary": "#582d00",
+                    "secondary-fixed": "#c4eeb8",
+                    "inverse-on-surface": "#f2f0f0",
+                    "error": "#ba1a1a",
+                    "on-background": "#1b1c1c",
+                    "on-primary-fixed-variant": "#0c4783",
+                    "on-surface-variant": "#424750",
+                    "on-secondary-container": "#476c40",
+                    "inverse-primary": "#a6c8ff",
+                    "on-secondary-fixed": "#002202",
+                    "secondary": "#43673c",
+                    "on-primary-container": "#9bc2ff",
+                    "surface-container": "#efeded",
+                    "surface-container-low": "#f5f3f3",
+                    "surface-dim": "#dbdad9",
+                    "on-primary": "#ffffff",
+                    "primary": "#00386c",
+                    "surface": "#fbf9f8",
+                    "surface-bright": "#fbf9f8",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "on-primary-fixed": "#001c3b",
+                    "on-error-container": "#93000a",
+                    "surface-container-highest": "#e4e2e2",
+                    "primary-fixed": "#d5e3ff",
+                    "on-error": "#ffffff",
+                    "primary-container": "#1a4f8b",
+                    "on-tertiary-container": "#ffaf6c",
+                    "tertiary-container": "#794000",
+                    "secondary-fixed-dim": "#a8d29d",
+                    "tertiary-fixed-dim": "#ffb77d"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Plus Jakarta Sans"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        }
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        .glass-nav {
+            backdrop-filter: blur(12px);
+            background: rgba(251, 249, 248, 0.8);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body">
+<!-- Top Navigation Bar -->
+<header class="docked full-width top-0 z-50 bg-[#fbf9f8] dark:bg-slate-900 border-none">
+<div class="bg-[#f5f3f3] dark:bg-slate-800 h-[40px] flex items-center justify-center text-xs uppercase tracking-widest text-on-surface px-4 text-center">
+            Productos Originales Importados • Calidad Garantizada
+        </div>
+<div class="flex flex-col w-full px-6 py-4 max-w-7xl mx-auto">
+<div class="flex items-center justify-between gap-8">
+<div class="text-2xl font-black tracking-tight text-[#00386c] dark:text-blue-400 font-headline">
+                    Capalsa
+                </div>
+<div class="hidden md:flex flex-1 max-w-md relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container-low border-none rounded-lg focus:ring-2 focus:ring-primary/20 text-sm" placeholder="Buscar repuestos o limpieza..." type="text"/>
+</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-slate-600 dark:text-slate-400 hover:text-[#00386c] transition-colors font-['Plus_Jakarta_Sans'] font-semibold" href="#">Hogar</a>
+<a class="text-[#00386c] font-bold border-b-2 border-[#00386c] pb-1 font-['Plus_Jakarta_Sans'] font-semibold" href="#">Limpieza</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-[#00386c] transition-colors font-['Plus_Jakarta_Sans'] font-semibold" href="#">Cocina</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-[#00386c] transition-colors font-['Plus_Jakarta_Sans'] font-semibold" href="#">Repuestos</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-[#f5f3f3] dark:hover:bg-slate-800 rounded-lg transition-all scale-95 active:duration-100">
+<span class="material-symbols-outlined text-[#00386c] dark:text-blue-400">shopping_cart</span>
+</button>
+<button class="p-2 hover:bg-[#f5f3f3] dark:hover:bg-slate-800 rounded-lg transition-all scale-95 active:duration-100">
+<span class="material-symbols-outlined text-[#00386c] dark:text-blue-400">account_circle</span>
+</button>
+</div>
+</div>
+</div>
+</header>
+<main class="max-w-7xl mx-auto px-6 py-12">
+<!-- Hero Section Asymmetric -->
+<section class="grid grid-cols-1 md:grid-cols-12 gap-8 mb-16 items-center">
+<div class="md:col-span-5">
+<nav class="flex items-center gap-2 text-xs text-outline mb-4 uppercase tracking-widest font-semibold">
+<span>Hogar</span>
+<span class="material-symbols-outlined text-[10px]">chevron_right</span>
+<span class="text-primary">Limpieza</span>
+</nav>
+<h1 class="text-display-lg text-4xl md:text-5xl font-headline font-extrabold text-primary mb-6 leading-tight">
+                    Limpieza de <br/><span class="text-secondary">Grado Profesional.</span>
+</h1>
+<p class="text-lg text-on-surface-variant mb-8 max-w-md">
+                    Descubre nuestra curaduría de productos originales importados. Diseñados para durar 10 años y facilitar tu día a día.
+                </p>
+<div class="flex flex-wrap gap-4">
+<div class="flex items-center gap-2 bg-secondary-container px-4 py-2 rounded-full text-on-secondary-container text-sm font-medium">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">verified</span>
+                        Productos Originales
+                    </div>
+<div class="flex items-center gap-2 bg-primary-fixed text-on-primary-fixed px-4 py-2 rounded-full text-sm font-medium">
+<span class="material-symbols-outlined text-sm">receipt_long</span>
+                        Facturamos
+                    </div>
+</div>
+</div>
+<div class="md:col-span-7 relative h-[400px] rounded-2xl overflow-hidden bg-surface-container-low">
+<img class="w-full h-full object-cover" data-alt="minimalist modern laundry room with premium cleaning supplies on oak shelving and soft morning light through a window" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7alJ-PqdRRrsogT6gmGbidzxxRExwyu65z4c9vVS18Ay6w8vFSO1oqvvk1oBYvtQZIs6HHO70D92TnA0JHoQKRjtFjJwslIHbcvy8YEWYT4-eLIx4sShNMtPBv5sWL0ZpVeerSzM-LTKUuKLd4vGbwCZedPgvyGmMD7r-1ex89faaWGFzHrJR2WBTCbpXgwbsGtbgDtWVY4mhNyoA1SFvZNyiIhR1adrHbGbvdG1Hww3knI7IlPzrs53H-r7TKjNxQHzGxpmxAcvJ"/>
+<div class="absolute inset-0 bg-gradient-to-tr from-primary/10 to-transparent"></div>
+</div>
+</section>
+<div class="flex flex-col md:flex-row gap-12">
+<!-- Sidebar Filters -->
+<aside class="w-full md:w-64 space-y-8">
+<div>
+<h3 class="font-headline font-bold text-primary mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">filter_list</span>
+                        Subcategorías
+                    </h3>
+<div class="space-y-3">
+<label class="flex items-center group cursor-pointer">
+<input class="rounded border-outline-variant text-primary focus:ring-primary mr-3 w-5 h-5" type="checkbox"/>
+<span class="text-on-surface-variant group-hover:text-primary transition-colors">Aspiradoras</span>
+</label>
+<label class="flex items-center group cursor-pointer">
+<input checked="" class="rounded border-outline-variant text-primary focus:ring-primary mr-3 w-5 h-5" type="checkbox"/>
+<span class="text-primary font-medium">Mopas</span>
+</label>
+<label class="flex items-center group cursor-pointer">
+<input class="rounded border-outline-variant text-primary focus:ring-primary mr-3 w-5 h-5" type="checkbox"/>
+<span class="text-on-surface-variant group-hover:text-primary transition-colors">Químicos</span>
+</label>
+<label class="flex items-center group cursor-pointer">
+<input class="rounded border-outline-variant text-primary focus:ring-primary mr-3 w-5 h-5" type="checkbox"/>
+<span class="text-on-surface-variant group-hover:text-primary transition-colors">Repuestos</span>
+</label>
+</div>
+</div>
+<div class="p-6 bg-surface-container-low rounded-xl">
+<h4 class="font-headline font-bold text-sm text-primary mb-4">Garantía Capalsa</h4>
+<p class="text-xs text-on-surface-variant leading-relaxed">
+                        Todos nuestros productos de limpieza cuentan con respaldo técnico directo y garantía de importación original.
+                    </p>
+</div>
+</aside>
+<!-- Product Grid -->
+<div class="flex-1">
+<div class="flex items-center justify-between mb-8">
+<span class="text-sm text-outline">Mostrando 12 de 48 productos</span>
+<button class="flex items-center gap-2 text-sm font-semibold text-primary">
+                        Ordenar por
+                        <span class="material-symbols-outlined text-sm">keyboard_arrow_down</span>
+</button>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- Product Card 1 -->
+<div class="bg-surface-container-lowest p-5 rounded-xl transition-all duration-300 hover:shadow-xl group">
+<div class="aspect-square bg-surface-container-low rounded-lg overflow-hidden mb-5 relative">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="professional grade steam mop upright design minimalist white and chrome finish on grey tiles" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDEpmhQNQsXCAx-I2NE44VdRi4V3M2C70INiCF3LEDugikjNb5xNi9mkLsgfc9YclnwyLFyZ9fSnOYnCNtv6Mt-smkGcG-O60WiAgsCBn28L_Xqw7_d7RQHzaQJMkH42h8I_3gvg8FizaVUYP-i8_vlJrupr5YNUomxaT5roBZjB6wfACXEKBb9yMaW2vYGZhVQulqnVZBZ1DRFOAcb0jMmBvBR4vnv4hPbVW3bgcGRnTcUhWub53EKsyE3gL3_dhLkqisDjPcbAwsv"/>
+<div class="absolute top-3 left-3 flex flex-col gap-2">
+<span class="bg-secondary-container text-on-secondary-container text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">Envío 7 días</span>
+<span class="bg-primary-fixed text-on-primary-fixed text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">Facturamos</span>
+</div>
+</div>
+<h3 class="font-headline font-bold text-lg text-primary mb-1">SteamMaster Pro X</h3>
+<p class="text-xs text-outline mb-4">Mopa de Vapor Industrial</p>
+<div class="flex items-center justify-between">
+<span class="text-xl font-black text-on-surface">$2,499.00</span>
+<button class="bg-primary hover:bg-primary-container text-white p-2 rounded-lg transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add_shopping_cart</span>
+</button>
+</div>
+</div>
+<!-- Product Card 2 -->
+<div class="bg-surface-container-lowest p-5 rounded-xl transition-all duration-300 hover:shadow-xl group">
+<div class="aspect-square bg-surface-container-low rounded-lg overflow-hidden mb-5 relative">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="high-tech robotic vacuum cleaner circular matte black design on minimalist hardwood floor" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAeajkYxSoHZZgCPy5IX3bV7SPhNbPcyxLSRK7BiRE0FtGQiBuu2nZXIYEbV5A85Xa74WMtnk6j9otMO1Mp_qKZhHB38bmQLHMiCha2V9htZ6yvpjg1USBbr5Qt2tcGwFSsF49WHPRiEPTdgiQCWjgpwcAwVTdaK9RMow978nBnaKTPG7SE4d_mcXTxgBg5qmcLgn78KHKEiZB-9u1deNgug73_-0Y8OS8ImWM5I5tIHCRDZN1mhYRCn-zx5z-RIv1PzzEQpLAwxTE5"/>
+<div class="absolute top-3 left-3 flex flex-col gap-2">
+<span class="bg-secondary-container text-on-secondary-container text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">Envío 7 días</span>
+<span class="bg-primary-fixed text-on-primary-fixed text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">Facturamos</span>
+</div>
+</div>
+<h3 class="font-headline font-bold text-lg text-primary mb-1">Aspiradora Robot G10</h3>
+<p class="text-xs text-outline mb-4">Autónoma • Filtro HEPA</p>
+<div class="flex items-center justify-between">
+<span class="text-xl font-black text-on-surface">$5,200.00</span>
+<button class="bg-primary hover:bg-primary-container text-white p-2 rounded-lg transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add_shopping_cart</span>
+</button>
+</div>
+</div>
+<!-- Product Card 3 -->
+<div class="bg-surface-container-lowest p-5 rounded-xl transition-all duration-300 hover:shadow-xl group">
+<div class="aspect-square bg-surface-container-low rounded-lg overflow-hidden mb-5 relative">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="set of premium cleaning chemical bottles with clean typography and organic ingredients branding" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtzgVSb3r5FufFhJU2jYWyAHc2oDU8_xWgUAPhMIS4SRuZg4X8FVgICX9D7gdSNgF8nmtLR32ouZt7wqZ8PpJnTBoc5ev4gvl8L3yXlPuIvHLIg0Di4MhqrzzI1qo1iLIbFU1D0-X3vhGjiA0BLYFgPA6UJ9ZPBTJdud27C-Neddk6DzVijbfN62Son_PwmVKk0z6rg4hPSsRke0RlmNea88LSwa_AU3ucUDYi2UEYPSghEhEylSREe7yUt-DW-KAoVIKcUWhshCYx"/>
+<div class="absolute top-3 left-3 flex flex-col gap-2">
+<span class="bg-secondary-container text-on-secondary-container text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">Envío 7 días</span>
+<span class="bg-primary-fixed text-on-primary-fixed text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">Facturamos</span>
+</div>
+</div>
+<h3 class="font-headline font-bold text-lg text-primary mb-1">Kit Químico Bio-Clean</h3>
+<p class="text-xs text-outline mb-4">Limpieza Profunda Eco-Friendly</p>
+<div class="flex items-center justify-between">
+<span class="text-xl font-black text-on-surface">$850.00</span>
+<button class="bg-primary hover:bg-primary-container text-white p-2 rounded-lg transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add_shopping_cart</span>
+</button>
+</div>
+</div>
+<!-- Product Card 4 -->
+<div class="bg-surface-container-lowest p-5 rounded-xl transition-all duration-300 hover:shadow-xl group">
+<div class="aspect-square bg-surface-container-low rounded-lg overflow-hidden mb-5 relative">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="cordless stick vacuum cleaner hanging on a wall charger minimalist laundry room setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCiKuqA4zQfcnA1X2B0Vfcc3b7bpAm8qkA5mBJkf9pYInEPjB2lpGDLhTyyR-4Mz3RhHo8KKoI1IcXxBgye6qbsL1RYrNaoU9rJ9piP-x989M6h0kjM8oaqnv3UX9JXAN2aUiD9Ej6pV4fG5sgUzGwoi5Rh_3dqaqU7Sy5XRHean1LR50D5B1HHJTuHeAZjp0R2Ttu4BKUCrTJj8ikOHW_dcAizxR2BoDoNLJ7ZbRO0A6dBnuPbE9Za-LjAFZKm_TXWJDiOm5vcWQ0K"/>
+<div class="absolute top-3 left-3 flex flex-col gap-2">
+<span class="bg-secondary-container text-on-secondary-container text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">Envío 7 días</span>
+<span class="bg-primary-fixed text-on-primary-fixed text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">Facturamos</span>
+</div>
+</div>
+<h3 class="font-headline font-bold text-lg text-primary mb-1">Cordless Ultra V2</h3>
+<p class="text-xs text-outline mb-4">Aspiradora Inalámbrica</p>
+<div class="flex items-center justify-between">
+<span class="text-xl font-black text-on-surface">$3,890.00</span>
+<button class="bg-primary hover:bg-primary-container text-white p-2 rounded-lg transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add_shopping_cart</span>
+</button>
+</div>
+</div>
+<!-- Product Card 5 -->
+<div class="bg-surface-container-lowest p-5 rounded-xl transition-all duration-300 hover:shadow-xl group">
+<div class="aspect-square bg-surface-container-low rounded-lg overflow-hidden mb-5 relative">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="microfiber mop head close up showing high quality weave texture on clean white floor" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9YaPUayYBfXAHV7e48yG-1SQyQAZInRFWxRc3MZU2xg8_iMvxo9661XRuKZqkWtLDCguAwzZAL3MgYDCmMBsgzpkkfhvFX4lIzSvFipMyzldsFpS9Ewi9rR5TTZrFtEGw5qzbpCun0NCbW9C6WiJe94N6pzpOk-eax_mStHJL60jW_rnZGhcxUglDYPWmutf40hpKuUVxct-vHQ9gLvJxOQgvPfIxy41ivo1DsDgy_4Hu4E3Mqrtbqwwe0hi_o4hMV9f6WBEKEz_9"/>
+<div class="absolute top-3 left-3 flex flex-col gap-2">
+<span class="bg-secondary-container text-on-secondary-container text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">Envío 7 días</span>
+<span class="bg-primary-fixed text-on-primary-fixed text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">Facturamos</span>
+</div>
+</div>
+<h3 class="font-headline font-bold text-lg text-primary mb-1">Mopa Microfibra Pro</h3>
+<p class="text-xs text-outline mb-4">Absorción Extrema</p>
+<div class="flex items-center justify-between">
+<span class="text-xl font-black text-on-surface">$450.00</span>
+<button class="bg-primary hover:bg-primary-container text-white p-2 rounded-lg transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add_shopping_cart</span>
+</button>
+</div>
+</div>
+<!-- Product Card 6 -->
+<div class="bg-surface-container-lowest p-5 rounded-xl transition-all duration-300 hover:shadow-xl group">
+<div class="aspect-square bg-surface-container-low rounded-lg overflow-hidden mb-5 relative">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="industrial vacuum cleaner nozzle with various brush attachments laid out on a workshop table" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7kZXDmJAXUljVIAcMC3vjyEfcD6cCa3vK4fmdi8SSZCQyNXIFmx3VgJ4Am3hkl6i7BknS3sEinNgEH0ztwKaRUCPSOrutETd9c_FRH_CC_9wktK2cDcD3vsvd5Ws03TcIs-rbdO7g-5bN5eNjQ5B8BMQ5a2HPFTOCTQwfmfrV7EZ3A40KpTTqHbi_Cw4sAg1XhEKAvFvlIF2z210AbvIUJ0LxZX4hyqP0gendBpxRWTdn96acwfi6jBDQibzwMYXewOc5WEKcMHXZ"/>
+<div class="absolute top-3 left-3 flex flex-col gap-2">
+<span class="bg-secondary-container text-on-secondary-container text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">Envío 7 días</span>
+<span class="bg-primary-fixed text-on-primary-fixed text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">Facturamos</span>
+</div>
+</div>
+<h3 class="font-headline font-bold text-lg text-primary mb-1">Repuesto Filtro HEPA 13</h3>
+<p class="text-xs text-outline mb-4">Compatibilidad Universal</p>
+<div class="flex items-center justify-between">
+<span class="text-xl font-black text-on-surface">$320.00</span>
+<button class="bg-primary hover:bg-primary-container text-white p-2 rounded-lg transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add_shopping_cart</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Pagination -->
+<div class="mt-12 flex items-center justify-center gap-2">
+<button class="w-10 h-10 flex items-center justify-center rounded-lg bg-surface-container-low text-primary">1</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-surface-container-low transition-colors text-outline">2</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-surface-container-low transition-colors text-outline">3</button>
+<span class="px-2">...</span>
+<button class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-surface-container-low transition-colors text-outline">8</button>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer Section -->
+<footer class="bg-[#f5f3f3] dark:bg-slate-950 border-t-0 mt-24">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-8 px-8 py-12 max-w-7xl mx-auto">
+<div class="space-y-4">
+<div class="text-xl font-bold text-[#00386c] font-headline">Capalsa</div>
+<p class="text-sm text-slate-500 leading-relaxed font-['Inter']">
+                    Elevando el estándar de limpieza en hogares mexicanos desde hace 10 años. Calidad que se nota, servicio que trasciende.
+                </p>
+</div>
+<div class="space-y-4">
+<h4 class="font-bold text-primary font-headline">Servicios</h4>
+<nav class="flex flex-col gap-2">
+<a class="text-slate-500 hover:text-[#00386c] transition-all duration-300 underline-offset-4 hover:underline font-['Inter'] text-sm" href="#">Productos Originales</a>
+<a class="text-slate-500 hover:text-[#00386c] transition-all duration-300 underline-offset-4 hover:underline font-['Inter'] text-sm" href="#">Facturamos</a>
+<a class="text-slate-500 hover:text-[#00386c] transition-all duration-300 underline-offset-4 hover:underline font-['Inter'] text-sm" href="#">Envío 7 Días</a>
+<a class="text-slate-500 hover:text-[#00386c] transition-all duration-300 underline-offset-4 hover:underline font-['Inter'] text-sm" href="#">10 Años en Línea</a>
+</nav>
+</div>
+<div class="space-y-4">
+<h4 class="font-bold text-primary font-headline">Legal</h4>
+<nav class="flex flex-col gap-2">
+<a class="text-slate-500 hover:text-[#00386c] transition-all duration-300 underline-offset-4 hover:underline font-['Inter'] text-sm" href="#">Términos y Condiciones</a>
+<a class="text-slate-500 hover:text-[#00386c] transition-all duration-300 underline-offset-4 hover:underline font-['Inter'] text-sm" href="#">Aviso de Privacidad</a>
+<a class="text-slate-500 hover:text-[#00386c] transition-all duration-300 underline-offset-4 hover:underline font-['Inter'] text-sm" href="#">Contacto</a>
+</nav>
+</div>
+<div class="space-y-4">
+<h4 class="font-bold text-primary font-headline">Boletín</h4>
+<p class="text-xs text-slate-500 font-['Inter']">Recibe ofertas exclusivas en productos importados.</p>
+<div class="flex gap-2">
+<input class="flex-1 text-xs bg-white border-none rounded-lg p-2 focus:ring-1 focus:ring-primary" placeholder="Email" type="email"/>
+<button class="bg-primary text-white text-xs px-3 py-2 rounded-lg font-bold">Unirme</button>
+</div>
+</div>
+</div>
+<div class="border-t border-outline-variant/10 py-6 text-center">
+<p class="text-xs text-slate-400 font-['Inter']">© 2024 Capalsa. Todos los derechos reservados. Facturación completa disponible.</p>
+</div>
+</footer>
+</body></html>

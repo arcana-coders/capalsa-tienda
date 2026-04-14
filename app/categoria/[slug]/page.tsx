@@ -1,4 +1,4 @@
-export const dynamic = 'force-dynamic'
+export const revalidate = 600 // Revalidar cada 10 minutos
 
 import { db, schema } from '@/lib/db'
 import { eq, and, gte, lte, asc, desc } from 'drizzle-orm'
@@ -35,7 +35,18 @@ export default async function CategoriaPage({ params, searchParams }: Props) {
                  : filtros.orden === 'precio_desc' ? desc(schema.productos.precio)
                  : desc(schema.productos.creadoEn)
 
-  const productos = await db.select().from(schema.productos)
+  const productos = await db.select({
+      id: schema.productos.id,
+      titulo: schema.productos.titulo,
+      slug: schema.productos.slug,
+      precio: schema.productos.precio,
+      precioCompare: schema.productos.precioCompare,
+      imagenes: schema.productos.imagenes,
+      marca: schema.productos.marca,
+      asin: schema.productos.asin,
+      categoriaId: schema.productos.categoriaId,
+    })
+    .from(schema.productos)
     .where(and(...condiciones))
     .orderBy(ordenCol)
     .limit(48)

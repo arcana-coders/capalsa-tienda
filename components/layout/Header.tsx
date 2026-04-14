@@ -108,23 +108,18 @@ function MobileSearchBar({ onClose }: { onClose: () => void }) {
 }
 
 /* ── Main Header ── */
-export default function Header() {
+export default function Header({ initialCategories = [] }: { initialCategories?: { nombre: string, slug: string }[] }) {
   const { count, toggleCart } = useCartStore()
   const [menuOpen, setMenuOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
-  const [categorias, setCategorias] = useState(INITIAL_CATEGORIES)
+  const [categorias, setCategorias] = useState(initialCategories.length > 0 ? initialCategories : INITIAL_CATEGORIES)
 
-  // Fetch dynamic categories
+  // Update categories if prop changes (though it shouldn't often in a layout)
   useEffect(() => {
-    fetch('/api/categorias')
-      .then(res => res.json())
-      .then(data => {
-        if (Array.isArray(data) && data.length > 0) {
-          setCategorias(data.map(c => ({ nombre: c.nombre, slug: c.slug })))
-        }
-      })
-      .catch(err => console.error('Error loading navigation categories:', err))
-  }, [])
+    if (initialCategories.length > 0) {
+      setCategorias(initialCategories)
+    }
+  }, [initialCategories])
 
   useEffect(() => {
     const handle = () => { if (window.innerWidth >= 1024) { setMenuOpen(false); setSearchOpen(false) } }

@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Finalizar Compra | Capalsa</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-lowest": "#ffffff",
+                        "outline": "#737781",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-fixed": "#2f1500",
+                        "tertiary-fixed": "#ffdcc3",
+                        "primary-fixed-dim": "#a6c8ff",
+                        "on-surface": "#1b1c1c",
+                        "secondary-container": "#c1ebb5",
+                        "background": "#fbf9f8",
+                        "inverse-surface": "#303031",
+                        "outline-variant": "#c2c6d1",
+                        "on-secondary-fixed-variant": "#2c4f27",
+                        "surface-container-high": "#e9e8e7",
+                        "surface-variant": "#e4e2e2",
+                        "surface-tint": "#2f5f9c",
+                        "on-tertiary-fixed-variant": "#6e3900",
+                        "tertiary": "#582d00",
+                        "secondary-fixed": "#c4eeb8",
+                        "inverse-on-surface": "#f2f0f0",
+                        "error": "#ba1a1a",
+                        "on-background": "#1b1c1c",
+                        "on-primary-fixed-variant": "#0c4783",
+                        "on-surface-variant": "#424750",
+                        "on-secondary-container": "#476c40",
+                        "inverse-primary": "#a6c8ff",
+                        "on-secondary-fixed": "#002202",
+                        "secondary": "#43673c",
+                        "on-primary-container": "#9bc2ff",
+                        "surface-container": "#efeded",
+                        "surface-container-low": "#f5f3f3",
+                        "surface-dim": "#dbdad9",
+                        "on-primary": "#ffffff",
+                        "primary": "#00386c",
+                        "surface": "#fbf9f8",
+                        "surface-bright": "#fbf9f8",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed": "#001c3b",
+                        "on-error-container": "#93000a",
+                        "surface-container-highest": "#e4e2e2",
+                        "primary-fixed": "#d5e3ff",
+                        "on-error": "#ffffff",
+                        "primary-container": "#1a4f8b",
+                        "on-tertiary-container": "#ffaf6c",
+                        "tertiary-container": "#794000",
+                        "secondary-fixed-dim": "#a8d29d",
+                        "tertiary-fixed-dim": "#ffb77d"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fbf9f8;
+        }
+        h1, h2, h3, .brand-logo {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface">
+<!-- Top Navigation (Shell suppressed for Focus Journey, showing Simplified Header) -->
+<header class="bg-[#fbf9f8] w-full z-50">
+<div class="flex items-center justify-between px-6 py-6 max-w-7xl mx-auto">
+<div class="text-2xl font-black tracking-tight text-[#00386c]">Capalsa</div>
+<div class="flex items-center gap-2 text-slate-500 font-medium text-sm">
+<span class="material-symbols-outlined text-sm">lock</span>
+                Pago Seguro SSL
+            </div>
+</div>
+</header>
+<main class="max-w-7xl mx-auto px-6 py-8">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+<!-- Left Column: Forms -->
+<div class="lg:col-span-8 space-y-8">
+<!-- Shipping Section -->
+<section class="bg-surface-container-low rounded-xl p-8">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-primary">local_shipping</span>
+<h2 class="text-xl font-bold text-primary">Envío a México</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-2">
+<label class="text-xs font-semibold text-on-surface-variant uppercase tracking-wider">Código Postal</label>
+<input class="w-full bg-surface-container-lowest border-none rounded-lg p-3 focus:ring-2 focus:ring-primary/30 transition-all outline-none" placeholder="01000" type="text"/>
+</div>
+<div class="space-y-2">
+<label class="text-xs font-semibold text-on-surface-variant uppercase tracking-wider">Estado</label>
+<select class="w-full bg-surface-container-lowest border-none rounded-lg p-3 focus:ring-2 focus:ring-primary/30 transition-all outline-none">
+<option>Ciudad de México</option>
+<option>Estado de México</option>
+<option>Jalisco</option>
+<option>Nuevo León</option>
+</select>
+</div>
+<div class="md:col-span-2 space-y-2">
+<label class="text-xs font-semibold text-on-surface-variant uppercase tracking-wider">Dirección Completa</label>
+<input class="w-full bg-surface-container-lowest border-none rounded-lg p-3 focus:ring-2 focus:ring-primary/30 transition-all outline-none" placeholder="Calle, número, colonia y referencias" type="text"/>
+</div>
+</div>
+</section>
+<!-- Billing Section (Datos de Facturación) -->
+<section class="bg-surface-container-low rounded-xl p-8">
+<div class="flex items-center justify-between mb-6">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">description</span>
+<h2 class="text-xl font-bold text-primary">Datos de Facturación</h2>
+</div>
+<label class="flex items-center cursor-pointer gap-2">
+<input class="rounded text-primary focus:ring-primary" type="checkbox"/>
+<span class="text-sm font-medium text-on-surface-variant">¿Requiere Factura?</span>
+</label>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="md:col-span-2 space-y-2">
+<label class="text-xs font-semibold text-on-surface-variant uppercase tracking-wider">Razón Social</label>
+<input class="w-full bg-surface-container-lowest border-none rounded-lg p-3 focus:ring-2 focus:ring-primary/30 transition-all outline-none" placeholder="Nombre legal o empresa" type="text"/>
+</div>
+<div class="space-y-2">
+<label class="text-xs font-semibold text-on-surface-variant uppercase tracking-wider">RFC</label>
+<input class="w-full bg-surface-container-lowest border-none rounded-lg p-3 focus:ring-2 focus:ring-primary/30 transition-all outline-none" placeholder="ABCD123456XYZ" type="text"/>
+</div>
+<div class="space-y-2">
+<label class="text-xs font-semibold text-on-surface-variant uppercase tracking-wider">Uso de CFDI</label>
+<select class="w-full bg-surface-container-lowest border-none rounded-lg p-3 focus:ring-2 focus:ring-primary/30 transition-all outline-none">
+<option>G03 - Gastos en general</option>
+<option>P01 - Por definir</option>
+</select>
+</div>
+</div>
+</section>
+<!-- Payment Methods -->
+<section class="bg-surface-container-low rounded-xl p-8">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-primary">payments</span>
+<h2 class="text-xl font-bold text-primary">Método de Pago</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<button class="flex flex-col items-center justify-center p-6 bg-surface-container-lowest rounded-xl border-2 border-primary transition-all">
+<span class="material-symbols-outlined text-3xl mb-2 text-primary" style="font-variation-settings: 'FILL' 1;">credit_card</span>
+<span class="text-sm font-bold text-primary">Tarjeta</span>
+</button>
+<button class="flex flex-col items-center justify-center p-6 bg-surface-container-lowest rounded-xl border-2 border-transparent hover:border-outline-variant transition-all">
+<span class="material-symbols-outlined text-3xl mb-2 text-slate-500">account_balance</span>
+<span class="text-sm font-bold text-slate-600">Transferencia</span>
+</button>
+<button class="flex flex-col items-center justify-center p-6 bg-surface-container-lowest rounded-xl border-2 border-transparent hover:border-outline-variant transition-all">
+<span class="material-symbols-outlined text-3xl mb-2 text-slate-500">store</span>
+<span class="text-sm font-bold text-slate-600">Efectivo / OXXO</span>
+</button>
+</div>
+<div class="mt-8 space-y-4">
+<input class="w-full bg-surface-container-lowest border-none rounded-lg p-3 focus:ring-2 focus:ring-primary/30 transition-all outline-none" placeholder="Número de tarjeta" type="text"/>
+<div class="grid grid-cols-2 gap-4">
+<input class="bg-surface-container-lowest border-none rounded-lg p-3 focus:ring-2 focus:ring-primary/30 transition-all outline-none" placeholder="MM/YY" type="text"/>
+<input class="bg-surface-container-lowest border-none rounded-lg p-3 focus:ring-2 focus:ring-primary/30 transition-all outline-none" placeholder="CVV" type="text"/>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Column: Summary -->
+<div class="lg:col-span-4">
+<div class="sticky top-8 space-y-6">
+<div class="bg-surface-container-lowest border border-surface-container-high rounded-xl p-6 shadow-sm">
+<h3 class="text-lg font-bold text-primary mb-6">Resumen del Pedido</h3>
+<div class="space-y-6 mb-8">
+<!-- Product 1 -->
+<div class="flex gap-4">
+<div class="w-20 h-20 rounded-lg bg-surface-container-low flex-shrink-0 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="professional industrial vacuum cleaner in sleek blue and silver metal finishes on a clean studio background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDHOxa_Ly1hB0rfAYov_UBbtl14vP5_bOLw8IEIm2oiYtgw4qswbS74tt0WntJ2ftIsN5bDfijPBP1j4Mrw8L0SjwLI7D0QFKIeELMn6bgbGce9IfFoKTmTjt1CLeXgWC7MXFQyDuqqtTPsODg5DDFjjXymYGjQ1WjI4mB3Fw90KSTkfwKTssAuS0hKadcMma7bXGK9cRLTcE16zUQH8bYXIQNngKULvpwbmsng6LCVCyqJp3yqT0YH10t-QujFn0ZJh3fCYwOCtX-w"/>
+</div>
+<div class="flex-1">
+<h4 class="text-sm font-bold leading-tight">Aspiradora Industrial V-PRO 2000</h4>
+<p class="text-xs text-on-surface-variant mt-1">1 Unidad • Original</p>
+<div class="text-sm font-bold text-primary mt-2">$4,899.00 MXN</div>
+</div>
+</div>
+<!-- Product 2 -->
+<div class="flex gap-4">
+<div class="w-20 h-20 rounded-lg bg-surface-container-low flex-shrink-0 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="professional grade eco-friendly floor detergent bottles with clear labeling and sage green accents" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQLx0414yTej845p0XUzOtIF_B579cFv-y08hnCRYOonOC-pDFnElP-CVRYKqE5F2y3n22SitSXboodieo3xZKmqwTOQl0-jLsLXvX18AjsPuAVIZmB9qz-aS0XwFwQyxw_I9ei1Cr8bKI_DtOeDLDUmELpHFq9fJ5lbDIFiImhZ-3fU_dhBD2Tu4wj7rGeMVr86jJAOglipAebWojDbsNj7EO-n__HhxtJbDnnLu4bARZLKfzt0Ta6WeE5NF-qD-1-_QojgPc14DR"/>
+</div>
+<div class="flex-1">
+<h4 class="text-sm font-bold leading-tight">Pack Detergente Concentrado 5L</h4>
+<p class="text-xs text-on-surface-variant mt-1">2 Unidades • Limpieza Profunda</p>
+<div class="text-sm font-bold text-primary mt-2">$850.00 MXN</div>
+</div>
+</div>
+</div>
+<div class="pt-6 border-t border-surface-container-high space-y-3">
+<div class="flex justify-between text-sm text-on-surface-variant">
+<span>Subtotal</span>
+<span>$5,749.00</span>
+</div>
+<div class="flex justify-between text-sm text-on-surface-variant">
+<span>Envío (México)</span>
+<span class="text-secondary font-bold">GRATIS</span>
+</div>
+<div class="flex justify-between text-sm text-on-surface-variant">
+<span>IVA (16%)</span>
+<span>$919.84</span>
+</div>
+<div class="flex justify-between text-xl font-black text-primary pt-4">
+<span>Total</span>
+<span>$6,668.84 MXN</span>
+</div>
+</div>
+<button class="w-full mt-8 py-4 bg-gradient-to-br from-primary to-primary-container text-white rounded-lg font-bold text-lg shadow-lg hover:scale-[1.02] active:scale-95 transition-all">
+                            Confirmar y Pagar
+                        </button>
+<div class="mt-4 flex items-center justify-center gap-2 text-xs text-secondary font-semibold">
+<span class="material-symbols-outlined text-sm">verified_user</span>
+                            Compra protegida por 10 años de trayectoria
+                        </div>
+</div>
+<!-- Trust Badges -->
+<div class="bg-secondary-container rounded-xl p-4 flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-white flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+</div>
+<div>
+<p class="text-sm font-bold text-on-secondary-container">Garantía Capalsa</p>
+<p class="text-xs text-on-secondary-container opacity-80">Productos 100% originales con factura fiscal.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<footer class="mt-20 bg-surface-container-low border-t-0">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-8 px-8 py-12 max-w-7xl mx-auto font-['Inter'] text-sm leading-relaxed">
+<div class="col-span-1 md:col-span-1">
+<div class="text-xl font-bold text-[#00386c] mb-4">Capalsa</div>
+<p class="text-slate-500 mb-4">Especialistas en soluciones de limpieza industrial y repuestos con más de una década de experiencia.</p>
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-slate-400">payments</span>
+<span class="material-symbols-outlined text-slate-400">shield</span>
+<span class="material-symbols-outlined text-slate-400">local_shipping</span>
+</div>
+</div>
+<div>
+<h4 class="font-bold text-primary mb-4">Servicio</h4>
+<ul class="space-y-2">
+<li><a class="text-slate-500 hover:text-[#00386c] hover:underline underline-offset-4 transition-all" href="#">Productos Originales</a></li>
+<li><a class="text-slate-500 hover:text-[#00386c] hover:underline underline-offset-4 transition-all" href="#">Envío 7 Días</a></li>
+<li><a class="text-slate-500 hover:text-[#00386c] hover:underline underline-offset-4 transition-all" href="#">Facturamos</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-primary mb-4">Empresa</h4>
+<ul class="space-y-2">
+<li><a class="text-slate-500 hover:text-[#00386c] hover:underline underline-offset-4 transition-all" href="#">10 Años en Línea</a></li>
+<li><a class="text-slate-500 hover:text-[#00386c] hover:underline underline-offset-4 transition-all" href="#">Contacto</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-primary mb-4">Legal</h4>
+<ul class="space-y-2">
+<li><a class="text-slate-500 hover:text-[#00386c] hover:underline underline-offset-4 transition-all" href="#">Términos y Condiciones</a></li>
+<li><a class="text-slate-500 hover:text-[#00386c] hover:underline underline-offset-4 transition-all" href="#">Aviso de Privacidad</a></li>
+</ul>
+</div>
+</div>
+<div class="max-w-7xl mx-auto px-8 py-6 border-t border-surface-container flex flex-col md:flex-row justify-between items-center text-xs text-slate-400">
+<p>© 2024 Capalsa. Todos los derechos reservados. Facturación completa disponible.</p>
+<div class="flex gap-6 mt-4 md:mt-0">
+<span>MXN - Pesos Mexicanos</span>
+<span>Región: México</span>
+</div>
+</div>
+</footer>
+</body></html>

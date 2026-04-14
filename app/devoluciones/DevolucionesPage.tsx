@@ -2,6 +2,13 @@
 
 import Link from 'next/link'
 import { useEffect, useRef } from 'react'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+// Registrar el plugin una sola vez fuera del componente (seguro en cliente)
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger)
+}
 
 // ── Icons ──────────────────────────────────────────────────────────────────
 const IconCheck = () => (
@@ -91,34 +98,72 @@ export default function DevolucionesPage() {
   const noteRef    = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    let ctx: any
-    import('gsap').then(({ gsap }) =>
-      import('gsap/ScrollTrigger').then(({ ScrollTrigger }) => {
-        gsap.registerPlugin(ScrollTrigger)
-        ctx = gsap.context(() => {
-          // Hero
-          gsap.from(heroRef.current!.querySelectorAll('.anim-hero > *'), {
-            y: 30, opacity: 0, duration: 0.8, stagger: 0.15, ease: 'power4.out',
-          })
-          // Cards
-          gsap.from(cardsRef.current!.querySelectorAll('.anim-card'), {
-            y: 40, opacity: 0, duration: 0.7, stagger: 0.12, ease: 'back.out(1.4)',
-            scrollTrigger: { trigger: cardsRef.current, start: 'top 85%' },
-          })
-          // Rows
-          gsap.from(aplicaRef.current!.querySelectorAll('.anim-row'), {
-            x: -25, opacity: 0, duration: 0.5, stagger: 0.1, ease: 'power3.out',
-            scrollTrigger: { trigger: aplicaRef.current, start: 'top 85%' },
-          })
-          // Pasos
-          gsap.from(pasosRef.current!.querySelectorAll('.anim-step'), {
-            y: 30, opacity: 0, duration: 0.6, stagger: 0.15, ease: 'power3.out',
-            scrollTrigger: { trigger: pasosRef.current, start: 'top 85%' },
-          })
-        })
-      })
-    )
-    return () => ctx?.revert()
+    const ctx = gsap.context(() => {
+      // Hero (Entrada inmediata con fromTo)
+      gsap.fromTo(heroRef.current!.querySelectorAll('.anim-hero > *'), 
+        { y: 30, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, stagger: 0.15, ease: 'power4.out' }
+      )
+      
+      // Cards (ScrollTrigger con fromTo)
+      gsap.fromTo(cardsRef.current!.querySelectorAll('.anim-card'), 
+        { y: 40, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.7, stagger: 0.12, ease: 'back.out(1.4)',
+          scrollTrigger: { 
+            trigger: cardsRef.current, 
+            start: 'top 90%',
+            toggleActions: 'play none none none' 
+          }
+        }
+      )
+      
+      // Filas Protocolo (Izquierda)
+      if (aplicaRef.current) {
+        gsap.fromTo(aplicaRef.current.querySelectorAll('.anim-row'), 
+          { x: -25, opacity: 0 },
+          { x: 0, opacity: 1, duration: 0.5, stagger: 0.1, ease: 'power3.out',
+            scrollTrigger: { 
+              trigger: aplicaRef.current, 
+              start: 'top 90%',
+              toggleActions: 'play none none none'
+            }
+          }
+        )
+      }
+
+      // Filas Exclusiones (Derecha - Faltaba antes)
+      if (noRef.current) {
+        gsap.fromTo(noRef.current.querySelectorAll('.anim-row'), 
+          { x: 25, opacity: 0 },
+          { x: 0, opacity: 1, duration: 0.5, stagger: 0.1, ease: 'power3.out',
+            scrollTrigger: { 
+              trigger: noRef.current, 
+              start: 'top 90%',
+              toggleActions: 'play none none none'
+            }
+          }
+        )
+      }
+      
+      // Pasos
+      if (pasosRef.current) {
+        gsap.fromTo(pasosRef.current.querySelectorAll('.anim-step'), 
+          { y: 30, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.6, stagger: 0.15, ease: 'power3.out',
+            scrollTrigger: { 
+              trigger: pasosRef.current, 
+              start: 'top 90%',
+              toggleActions: 'play none none none'
+            }
+          }
+        )
+      }
+
+      // IMPORTANTE: Refrescar ScrollTrigger para recalcular posiciones tras la hidratación
+      ScrollTrigger.refresh()
+    })
+
+    return () => ctx.revert()
   }, [])
 
   return (
@@ -191,7 +236,7 @@ export default function DevolucionesPage() {
             <div className="space-y-10" ref={noRef}>
                 <div>
                     <h2 
-                        className="text-3xl font-black text-[#c4c8ce] mb-4"
+                        className="text-3xl font-black text-[#1b1c1c] mb-4"
                         style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
                     >
                         Exclusiones de Garantía
@@ -199,9 +244,9 @@ export default function DevolucionesPage() {
                     <p className="text-sm text-[#74787e]">Condiciones que invalidan el proceso de devolución.</p>
                 </div>
 
-                <div className="bg-[#f5f3f3] rounded-[3rem] overflow-hidden border border-[#c4c8ce]/20">
+                <div className="bg-[#f5f3f3] rounded-[3rem] overflow-hidden border border-[#c4c8ce]/20 shadow-sm">
                     {NO_APLICA.map((item, i) => (
-                        <div key={i} className="anim-row flex items-start gap-5 p-8 border-b border-[#c4c8ce]/10 last:border-0 opacity-80">
+                        <div key={i} className="anim-row flex items-start gap-5 p-8 border-b border-[#c4c8ce]/10 last:border-0">
                             <span className="w-8 h-8 rounded-full bg-white text-[#74787e] flex items-center justify-center flex-shrink-0">
                                 <IconX />
                             </span>

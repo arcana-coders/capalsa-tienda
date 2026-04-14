@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-lowest": "#ffffff",
+                    "outline": "#737781",
+                    "error-container": "#ffdad6",
+                    "on-tertiary-fixed": "#2f1500",
+                    "tertiary-fixed": "#ffdcc3",
+                    "primary-fixed-dim": "#a6c8ff",
+                    "on-surface": "#1b1c1c",
+                    "secondary-container": "#c1ebb5",
+                    "background": "#fbf9f8",
+                    "inverse-surface": "#303031",
+                    "outline-variant": "#c2c6d1",
+                    "on-secondary-fixed-variant": "#2c4f27",
+                    "surface-container-high": "#e9e8e7",
+                    "surface-variant": "#e4e2e2",
+                    "surface-tint": "#2f5f9c",
+                    "on-tertiary-fixed-variant": "#6e3900",
+                    "tertiary": "#582d00",
+                    "secondary-fixed": "#c4eeb8",
+                    "inverse-on-surface": "#f2f0f0",
+                    "error": "#ba1a1a",
+                    "on-background": "#1b1c1c",
+                    "on-primary-fixed-variant": "#0c4783",
+                    "on-surface-variant": "#424750",
+                    "on-secondary-container": "#476c40",
+                    "inverse-primary": "#a6c8ff",
+                    "on-secondary-fixed": "#002202",
+                    "secondary": "#43673c",
+                    "on-primary-container": "#9bc2ff",
+                    "surface-container": "#efeded",
+                    "surface-container-low": "#f5f3f3",
+                    "surface-dim": "#dbdad9",
+                    "on-primary": "#ffffff",
+                    "primary": "#00386c",
+                    "surface": "#fbf9f8",
+                    "surface-bright": "#fbf9f8",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "on-primary-fixed": "#001c3b",
+                    "on-error-container": "#93000a",
+                    "surface-container-highest": "#e4e2e2",
+                    "primary-fixed": "#d5e3ff",
+                    "on-error": "#ffffff",
+                    "primary-container": "#1a4f8b",
+                    "on-tertiary-container": "#ffaf6c",
+                    "tertiary-container": "#794000",
+                    "secondary-fixed-dim": "#a8d29d",
+                    "tertiary-fixed-dim": "#ffb77d"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Plus Jakarta Sans"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3 { font-family: 'Plus Jakarta Sans', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-surface">
+<!-- TopNavBar -->
+<header class="bg-[#fbf9f8] dark:bg-slate-900 sticky top-0 z-50">
+<div class="bg-[#f5f3f3] dark:bg-slate-800 h-[40px] flex items-center justify-center text-xs uppercase tracking-widest text-on-surface">
+            Envío 7 días hábiles • Facturación completa disponible
+        </div>
+<nav class="flex flex-col w-full px-6 py-4 max-w-7xl mx-auto">
+<div class="flex items-center justify-between gap-8">
+<a class="text-2xl font-black tracking-tight text-[#00386c] dark:text-blue-400" href="#">Capalsa</a>
+<div class="hidden md:flex flex-1 max-w-xl">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full bg-surface-container-low border-none rounded-lg py-2 pl-10 pr-4 focus:ring-2 focus:ring-primary/30 transition-all" placeholder="Buscar repuestos, cocina, limpieza..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden lg:flex items-center gap-6 font-['Plus_Jakarta_Sans'] font-semibold">
+<a class="text-[#00386c] font-bold border-b-2 border-[#00386c] pb-1" href="#">Hogar</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-[#00386c] transition-colors" href="#">Limpieza</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-[#00386c] transition-colors" href="#">Cocina</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-[#00386c] transition-colors" href="#">Repuestos</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-[#f5f3f3] dark:hover:bg-slate-800 rounded-lg transition-all active:scale-95">
+<span class="material-symbols-outlined text-[#00386c]">shopping_cart</span>
+</button>
+<button class="p-2 hover:bg-[#f5f3f3] dark:hover:bg-slate-800 rounded-lg transition-all active:scale-95">
+<span class="material-symbols-outlined text-[#00386c]">account_circle</span>
+</button>
+</div>
+</div>
+</div>
+</nav>
+</header>
+<main>
+<!-- Hero Section -->
+<section class="relative w-full overflow-hidden bg-surface-container-low">
+<div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 items-center min-h-[500px]">
+<div class="p-8 lg:p-12 z-10">
+<span class="inline-block px-3 py-1 mb-6 text-xs font-bold tracking-widest uppercase bg-secondary-container text-on-secondary-container rounded">Importaciones USA</span>
+<h1 class="text-4xl lg:text-6xl font-extrabold text-primary mb-6 leading-tight">
+                        Productos originales para tu hogar desde USA.
+                    </h1>
+<p class="text-xl text-on-surface-variant mb-8 max-w-lg leading-relaxed">
+                        Envío garantizado en 7 días hábiles. Facturamos todas tus compras con validez oficial.
+                    </p>
+<div class="flex flex-wrap gap-4">
+<button class="bg-gradient-to-br from-primary to-primary-container text-on-primary px-8 py-4 rounded-xl font-bold text-lg shadow-xl shadow-primary/20 hover:scale-105 active:scale-95 transition-all">
+                            Ver Ofertas del Día
+                        </button>
+<button class="bg-surface-container-lowest text-on-surface px-8 py-4 rounded-xl font-bold text-lg border-2 border-outline-variant/30 hover:bg-white transition-all">
+                            Explorar Novedades
+                        </button>
+</div>
+</div>
+<div class="relative h-[400px] lg:h-full group">
+<img class="absolute inset-0 w-full h-full object-cover lg:rounded-l-[3rem]" data-alt="luxury high-end kitchen island with a modern coffee machine and stainless steel cookware set in a bright sunlit kitchen" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXypAEl2m6wqCWvfiHbv98ZnZkMgslM3dJ2a7qQkYsXBJ_KjqcetsmDr7uiXpZIe0n_MSuy9zHzlKu_NfJ00iqKoMukOvq0cHZ6DxwooIT9tlXjzAxRxt4Ld1mfpxoWMsFuxGrQqwONCIgr-QM5z5QirtQOQDBYCvFaCqgL_uTri6n6qndDFm-V3tZR-_3CVLRJJmmEgz_UlxnIhn2HPX--3N3Ey9mvTmIhkAcOb5ggGczUe_vQti47h_2Dilrcy4PfNOPkUOCWGd1"/>
+<div class="absolute inset-0 bg-gradient-to-r from-surface-container-low via-transparent to-transparent lg:block hidden"></div>
+</div>
+</div>
+</section>
+<!-- Trust Section -->
+<section class="py-12 bg-white">
+<div class="max-w-7xl mx-auto px-6">
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+<!-- Badge 1 -->
+<div class="flex flex-col items-center p-6 bg-secondary-container/30 rounded-2xl text-center group hover:bg-secondary-container transition-colors">
+<span class="material-symbols-outlined text-on-secondary-container text-4xl mb-3" style="font-variation-settings: 'FILL' 1;">verified</span>
+<p class="font-bold text-on-secondary-container">Productos Originales</p>
+</div>
+<!-- Badge 2 -->
+<div class="flex flex-col items-center p-6 bg-secondary-container/30 rounded-2xl text-center group hover:bg-secondary-container transition-colors">
+<span class="material-symbols-outlined text-on-secondary-container text-4xl mb-3">local_shipping</span>
+<p class="font-bold text-on-secondary-container">Envío 7 Días</p>
+</div>
+<!-- Badge 3 -->
+<div class="flex flex-col items-center p-6 bg-secondary-container/30 rounded-2xl text-center group hover:bg-secondary-container transition-colors">
+<span class="material-symbols-outlined text-on-secondary-container text-4xl mb-3">receipt_long</span>
+<p class="font-bold text-on-secondary-container">Facturamos</p>
+</div>
+<!-- Badge 4 -->
+<div class="flex flex-col items-center p-6 bg-secondary-container/30 rounded-2xl text-center group hover:bg-secondary-container transition-colors">
+<span class="material-symbols-outlined text-on-secondary-container text-4xl mb-3">history</span>
+<p class="font-bold text-on-secondary-container">10 Años en Línea</p>
+</div>
+<!-- Badge 5 -->
+<div class="flex flex-col items-center p-6 bg-secondary-container/30 rounded-2xl text-center group hover:bg-secondary-container transition-colors">
+<span class="material-symbols-outlined text-on-secondary-container text-4xl mb-3">storefront</span>
+<p class="font-bold text-on-secondary-container">Amazon / ML</p>
+</div>
+<!-- Badge 6 -->
+<div class="flex flex-col items-center p-6 bg-secondary-container/30 rounded-2xl text-center group hover:bg-secondary-container transition-colors">
+<span class="material-symbols-outlined text-on-secondary-container text-4xl mb-3">grade</span>
+<p class="font-bold text-on-secondary-container">Garantía Total</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Ofertas del Día (Bento Style) -->
+<section class="py-16 px-6 max-w-7xl mx-auto">
+<div class="flex items-center justify-between mb-10">
+<div>
+<h2 class="text-3xl font-bold text-primary">Ofertas del día</h2>
+<p class="text-on-surface-variant">Precios exclusivos de importación</p>
+</div>
+<a class="text-primary font-bold flex items-center gap-1 hover:underline" href="#">Ver todas <span class="material-symbols-outlined">chevron_right</span></a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+<!-- Large Feature -->
+<div class="md:col-span-2 md:row-span-2 bg-surface-container-lowest rounded-3xl p-8 flex flex-col justify-between group overflow-hidden relative">
+<div class="z-10">
+<span class="bg-tertiary text-on-tertiary px-3 py-1 rounded-full text-xs font-bold">-35% OFF</span>
+<h3 class="text-3xl font-bold mt-4 max-w-[200px]">Robot Aspiradora de Alta Gama</h3>
+<p class="text-on-surface-variant mt-2 text-lg">Limpieza inteligente sin esfuerzo</p>
+<p class="text-3xl font-black text-primary mt-6">$4,899 MXN</p>
+<button class="mt-8 bg-primary text-on-primary px-6 py-3 rounded-xl font-bold hover:scale-105 active:scale-95 transition-all">Agregar al carrito</button>
+</div>
+<img class="absolute -right-12 -bottom-12 w-80 h-80 object-contain group-hover:scale-110 transition-transform duration-500" data-alt="modern black robotic vacuum cleaner on light wooden floor moving autonomously near a minimalist white couch" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZrrXlmWvH1S2k6pvja3YJqfcMu5yQZsNluHJkV7dypj0o8o5CWhiCtgT15zrI1kc016P4RvgmjHQkPpKu2CvT0BJAkXtEY-OtBoMTBU2yA4tWLT5UVfJk_2QlQ1FqroXsO8jl_YLdMnrgss8vBmdDWjLd9PNOu5Hfdf5jSQtxkgPsax_FrdF-WwWDWrKr0r2FlYGBfoDwm--i_3XvueGg2qglWAWtDuFjxkrqfRbmxud261ZHqZ7bwYVV1u8ki4tWtLEmyf2lM9ma"/>
+</div>
+<!-- Small Cards -->
+<div class="md:col-span-1 bg-surface-container-lowest rounded-3xl p-6 flex flex-col group border border-transparent hover:border-primary/10 transition-all">
+<div class="h-40 overflow-hidden rounded-xl bg-surface-container-low mb-4">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="high quality multi-function air fryer on marble countertop in a bright domestic kitchen" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCdRJaP7dsedNfEUgHDpzL9xnZSF3w20sHIacF95RJWLz5RBmpPKnuEAIYufREdoMS3x5YATYybq_O6pNe4s8zgwpasz3LGwYCnNpxj_NgtWSMyCqB7Ds18nuV9HjTkLOR5_vM9I9_02Y1Rw28Su1G3IzjuLR8kurXRtbpkYfqFMkpHnVqgb5KNVYNXHafaDal--4y6gX201mZ-0qujlHezhR9hH7VDBl2VJgCVTtBA4dnJrEHBO6_iQSIjSZlYfgCFb2CAirVlQjvI"/>
+</div>
+<span class="text-xs font-bold text-tertiary uppercase">Cocina</span>
+<h4 class="font-bold mt-1 text-lg">Freidora de Aire Digital</h4>
+<div class="flex items-center gap-2 mt-auto pt-4">
+<span class="font-bold text-primary text-xl">$2,150</span>
+<span class="text-outline text-sm line-through">$2,900</span>
+</div>
+</div>
+<div class="md:col-span-1 bg-surface-container-lowest rounded-3xl p-6 flex flex-col group border border-transparent hover:border-primary/10 transition-all">
+<div class="h-40 overflow-hidden rounded-xl bg-surface-container-low mb-4">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="luxury automatic espresso machine pouring dark coffee into a glass cup with steam rising" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBP_Cy4sqn4hnB-1gjhWfxgRnC9IxQhD3dS3EvN_3UCoqWKL0MQfsIhCALhExtYYUew8NuqZfN4ZyWQFtIaThBgYezR7pxhOX1ljupW2IJrMZ8DTjFpRTlxa3FWqP8Iz5CSGTChMRSv0OZqZjBPKLjG_k4xfBObwjac0WAO6mZqBEszDtPLZJDdaXIa-Y6ta5pjIvE7p-Pe43fZmLz0TxRJqPEbxFkjgH3ocpyj7rzYm3hPOpzl5_nilHQStHsLModqagD8K-JxKZZ4"/>
+</div>
+<span class="text-xs font-bold text-tertiary uppercase">Desayuno</span>
+<h4 class="font-bold mt-1 text-lg">Máquina Espresso Pro</h4>
+<div class="flex items-center gap-2 mt-auto pt-4">
+<span class="font-bold text-primary text-xl">$1,850</span>
+<span class="text-outline text-sm line-through">$2,400</span>
+</div>
+</div>
+<!-- Additional Small Row -->
+<div class="md:col-span-2 bg-surface-container-lowest rounded-3xl p-6 flex items-center justify-between group overflow-hidden">
+<div class="flex-1 pr-4">
+<span class="bg-secondary text-on-secondary px-2 py-0.5 rounded text-[10px] font-bold">FAVORITO</span>
+<h4 class="font-bold text-xl mt-2">Batería de Cocina 12 Piezas</h4>
+<p class="text-on-surface-variant text-sm mt-1">Acero inoxidable grado quirúrgico</p>
+<p class="text-primary font-bold text-2xl mt-3">$3,200</p>
+</div>
+<div class="w-40 h-40 bg-surface-container-low rounded-2xl overflow-hidden">
+<img class="w-full h-full object-cover group-hover:rotate-6 transition-transform" data-alt="professional stainless steel pots and pans set arranged neatly on a dark studio background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAergt5h71aemGVYpm2ryAlfEfCO8SZbxH0zNdslcxK0eERxW-FsKYOiONAT8fuvxwPu_79NlP4dtTpEETHMGBGkIlDPFKS6fdfZtQmO8uqi3TWi_fckXx5bJwI26oeHh_YQyZPW1oaDfVxBmPGyWLkRr678ABF7JmTVzy904WGHpQ-YWgQ8N8JGXZ-ozX5SMRtBAqfDPzxNGB7fXjyUfTjkQsxS2wxTyQHEwc-wj5jLv8sT1636J7cyQnWbUJFQjSAI4XcrOxS3peb"/>
+</div>
+</div>
+</div>
+</section>
+<!-- Más Vendidos (Scrollable Section) -->
+<section class="py-16 bg-surface-container-low">
+<div class="max-w-7xl mx-auto px-6">
+<div class="flex items-end justify-between mb-10">
+<h2 class="text-3xl font-bold text-primary">Más vendidos <span class="block text-lg font-normal text-on-surface-variant">Los favoritos de nuestros clientes</span></h2>
+</div>
+<div class="flex gap-6 overflow-x-auto pb-8 scrollbar-hide">
+<!-- Product Card -->
+<div class="min-w-[280px] bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all">
+<div class="h-64 bg-surface-container-low relative">
+<img class="w-full h-full object-cover" data-alt="concentrated liquid laundry detergent in a large professional plastic container on a clean laundry room shelf" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAYy7kHIZfEe6PWa4H9MQkGrbpbmNpSLmGM0h4jUtRRlU1gRr79aFeBj8qSMauaQreCGhNaC7m0vfIheU_OWdfCcE3zSWeMz-Mv6wEPQtYIxWxmoFCsgeo7W1CQDrIikeIRWEaperjTYDIye0gTM7OS1fREEF3Vu-pjgh9nBOaceOmTTZiTrWlHtD6CYUphFFRp1T2zB6oq5NveVKead4uGY1stnKtLFU_iqab3BiyH0zJuY6XZkSzhQE95lWrtqHAQi6gzykdEWt4_"/>
+</div>
+<div class="p-6">
+<h5 class="text-on-surface-variant text-xs font-bold uppercase tracking-wide">Limpieza</h5>
+<h4 class="font-bold text-lg mt-1">Detergente Premium 10L</h4>
+<p class="text-primary font-black text-xl mt-4">$680 MXN</p>
+<button class="w-full mt-4 py-3 bg-surface-container-low text-primary font-bold rounded-lg hover:bg-primary hover:text-white transition-all">Añadir</button>
+</div>
+</div>
+<!-- Product Card -->
+<div class="min-w-[280px] bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all">
+<div class="h-64 bg-surface-container-low relative">
+<img class="w-full h-full object-cover" data-alt="modern handheld cordless vacuum cleaner being used to clean a light-colored rug in a stylish living room" src="https://lh3.googleusercontent.com/aida-public/AB6AXuABlrToJLJJqzT8vyJGm5VaWiUAI-FqLTkyG7xOq7brrAwF6S-G2At2z9CdNCyYEKgOqFfmBz9Z1JCV4CKD3Lh-IiaikorJMyFbln4PhB_GpbpoNEGfW2p8R4S6epe7Mq4QmcJ1x9GDdT5Umd3YqNXZYdxaZRxbDLVSa3YsOALQAAjPmpynttVYLjtw17-KjGQIn6_B3yXpggECGJdYrfHMUwdSnavNfoM6qWmEEHQHJdzXJdosdf67byPmasv-0-RM1m6IT0fiu_oa"/>
+</div>
+<div class="p-6">
+<h5 class="text-on-surface-variant text-xs font-bold uppercase tracking-wide">Electrodomésticos</h5>
+<h4 class="font-bold text-lg mt-1">Aspiradora Inalámbrica Pro</h4>
+<p class="text-primary font-black text-xl mt-4">$1,450 MXN</p>
+<button class="w-full mt-4 py-3 bg-surface-container-low text-primary font-bold rounded-lg hover:bg-primary hover:text-white transition-all">Añadir</button>
+</div>
+</div>
+<!-- Product Card -->
+<div class="min-w-[280px] bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all">
+<div class="h-64 bg-surface-container-low relative">
+<img class="w-full h-full object-cover" data-alt="professional set of various kitchen knives on a dark wooden magnetic strip on a kitchen wall" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDyc6RRrnVXm5CmykujP5YvsOzN9Z3xoOa8hjzCdMeZO0LZSLXyUK_n55xnvxsLuAWVN6zGO_dkEZ-U_wttCx0VQsBO9bgU632UCrcpF4KQ9OYVUO_Dx5mQAzzPLy2opO5TWMKZ69XvmUnoAct-i2isW1dXcYgXiil8c2-a8vp9oaGpnNEEux_zAmJ8D-tYuGk6CRdIGBs4Ih6zQX8nolbQKim5rIgwty7UQCF4cUTPytuoZ-gYPq4JLlGgccxgNp3RE4RYcgeYKuhz"/>
+</div>
+<div class="p-6">
+<h5 class="text-on-surface-variant text-xs font-bold uppercase tracking-wide">Cocina</h5>
+<h4 class="font-bold text-lg mt-1">Set de Cuchillos Premium</h4>
+<p class="text-primary font-black text-xl mt-4">$920 MXN</p>
+<button class="w-full mt-4 py-3 bg-surface-container-low text-primary font-bold rounded-lg hover:bg-primary hover:text-white transition-all">Añadir</button>
+</div>
+</div>
+<!-- Product Card -->
+<div class="min-w-[280px] bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all">
+<div class="h-64 bg-surface-container-low relative">
+<img class="w-full h-full object-cover" data-alt="high quality dark grey cast iron dutch oven on a modern stovetop with subtle light reflections" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZW6UoNnJQc2GQBu4OHqr_gT4NjlENQS8nAuEPkivG5cmQJHS0v8xygdDx3d-Uc1cLXHmDOcfu3nXBVatVLrDUh9V2RRMeiUXd81VoIhuWx1_wXPfUaD7KVAoVu47g1X-8jrnELSRlz2oqMUiNq9OHH59XynePjgBSSMcMLb2gcZliynpS_u9AdMQj9zRZtmAjmnUprs8yTdICIsaMGaB-iInQNzSf0hWio2msVPb2HO6aBPTNCY97bhnO6F5YDL2onOmVwXmHBQSs"/>
+</div>
+<div class="p-6">
+<h5 class="text-on-surface-variant text-xs font-bold uppercase tracking-wide">Hogar</h5>
+<h4 class="font-bold text-lg mt-1">Olla de Hierro Fundido</h4>
+<p class="text-primary font-black text-xl mt-4">$1,200 MXN</p>
+<button class="w-full mt-4 py-3 bg-surface-container-low text-primary font-bold rounded-lg hover:bg-primary hover:text-white transition-all">Añadir</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Novedades Hogar (Editorial Layout) -->
+<section class="py-20 px-6 max-w-7xl mx-auto">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+<div class="order-2 lg:order-1 relative">
+<div class="aspect-square bg-secondary-container/20 rounded-[4rem] absolute -top-10 -left-10 w-full h-full -z-10"></div>
+<img class="rounded-[3rem] shadow-2xl object-cover w-full h-[600px]" data-alt="lifestyle shot of a modern organized laundry room with white wicker baskets and glass jars of detergent" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAgHXUaA0sGTSrDBsVyT-AWwttCOShxlvaWHpmvKAAcQylRcFSiVSQ7jU2r5y_-Bvdos4asPVmzNpZbAqcu7mzxLe-SWEOcU2WFS3jll3oNSBzzaT_Bez0r6RfH_ZWcymtgjw1_UbqxrPrKfa2Ts-JcraOWNc6G47ncSj84kW8RW98oaSJ0VCqXbeCtMUsy1BUzvJI18K-c8hztMq73FoA5Kb-z-tDW0AnK-W5oo3MZsDVhIBaLCnOfD7MeoT8VV-Knlpt_w5NKIQmD"/>
+</div>
+<div class="order-1 lg:order-2 space-y-8">
+<h2 class="text-5xl font-black text-primary leading-tight">Novedades para un Hogar Moderno</h2>
+<p class="text-xl text-on-surface-variant leading-relaxed">
+                        Acabamos de recibir la nueva colección de organizadores y accesorios de limpieza importados. Diseñados para maximizar tu espacio con el estilo práctico que nos caracteriza.
+                    </p>
+<ul class="space-y-4">
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-medium">Nuevos organizadores de acrílico</span>
+</li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-medium">Línea de purificadores de aire 2024</span>
+</li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-medium">Iluminación inteligente para cocina</span>
+</li>
+</ul>
+<button class="bg-primary text-on-primary px-10 py-4 rounded-xl font-bold text-lg shadow-lg hover:translate-y-[-2px] transition-all">
+                        Ver Colección Nueva
+                    </button>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-[#f5f3f3] dark:bg-slate-950">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-8 px-8 py-12 max-w-7xl mx-auto font-['Inter'] text-sm leading-relaxed">
+<div class="space-y-4">
+<h3 class="text-xl font-bold text-[#00386c]">Capalsa</h3>
+<p class="text-slate-500">Expertos en importación directa de productos de alta calidad para el hogar. 10 años de confianza en México.</p>
+</div>
+<div class="flex flex-col gap-3">
+<h4 class="font-bold text-primary mb-2">Compañía</h4>
+<a class="text-slate-500 hover:text-[#00386c] underline decoration-[#1a4f8b] underline-offset-4 transition-all" href="#">Productos Originales</a>
+<a class="text-slate-500 hover:text-[#00386c] underline decoration-[#1a4f8b] underline-offset-4 transition-all" href="#">Envío 7 Días</a>
+<a class="text-slate-500 hover:text-[#00386c] underline decoration-[#1a4f8b] underline-offset-4 transition-all" href="#">Facturamos</a>
+</div>
+<div class="flex flex-col gap-3">
+<h4 class="font-bold text-primary mb-2">Soporte</h4>
+<a class="text-slate-500 hover:text-[#00386c] underline decoration-[#1a4f8b] underline-offset-4 transition-all" href="#">10 Años en Línea</a>
+<a class="text-slate-500 hover:text-[#00386c] underline decoration-[#1a4f8b] underline-offset-4 transition-all" href="#">Contacto</a>
+<a class="text-slate-500 hover:text-[#00386c] underline decoration-[#1a4f8b] underline-offset-4 transition-all" href="#">Términos y Condiciones</a>
+</div>
+<div class="space-y-4">
+<h4 class="font-bold text-primary mb-2">Suscríbete</h4>
+<p class="text-slate-500">Recibe ofertas exclusivas y novedades antes que nadie.</p>
+<div class="flex">
+<input class="w-full bg-white border-none rounded-l-lg px-4 py-2 focus:ring-1 focus:ring-primary" placeholder="Tu email" type="email"/>
+<button class="bg-primary text-on-primary px-4 py-2 rounded-r-lg font-bold">Unirse</button>
+</div>
+</div>
+</div>
+<div class="border-t border-outline-variant/10 py-6 text-center text-slate-400 text-xs">
+            © 2024 Capalsa. Todos los derechos reservados. Facturación completa disponible.
+        </div>
+</footer>
+</body></html>

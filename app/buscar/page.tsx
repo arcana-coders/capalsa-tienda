@@ -14,7 +14,18 @@ export default async function BuscarPage({ searchParams }: Props) {
   const query = q.trim()
 
   const productos = query
-    ? await db.select().from(schema.productos)
+    ? await db.select({
+          id: schema.productos.id,
+          titulo: schema.productos.titulo,
+          slug: schema.productos.slug,
+          precio: schema.productos.precio,
+          precioCompare: schema.productos.precioCompare,
+          imagenes: schema.productos.imagenes,
+          marca: schema.productos.marca,
+          asin: schema.productos.asin,
+          categoriaId: schema.productos.categoriaId,
+        })
+        .from(schema.productos)
         .where(
           and(
             eq(schema.productos.activo, true), 

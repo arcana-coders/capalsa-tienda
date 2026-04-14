@@ -2,6 +2,13 @@
 
 import Link from 'next/link'
 import { useEffect, useRef } from 'react'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+// Registrar plugin (seguro en cliente)
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger)
+}
 
 // ── Icons ──────────────────────────────────────────────────────────────────
 const IconTruck = () => (
@@ -67,35 +74,60 @@ export default function EnviosPage() {
   const noteRef   = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    let ctx: any
-    import('gsap').then(({ gsap }) =>
-      import('gsap/ScrollTrigger').then(({ ScrollTrigger }) => {
-        gsap.registerPlugin(ScrollTrigger)
-        ctx = gsap.context(() => {
-          // Hero
-          gsap.from(heroRef.current!.querySelectorAll('.anim-hero > *'), {
-            y: 30, opacity: 0, duration: 0.8, stagger: 0.15, ease: 'power4.out',
-          })
-          // Cards
-          gsap.from(cardsRef.current!.querySelectorAll('.anim-card'), {
-            y: 40, opacity: 0, duration: 0.7, stagger: 0.12, ease: 'back.out(1.4)',
-            scrollTrigger: { trigger: cardsRef.current, start: 'top 85%' },
-          })
-          // Rows
-          gsap.from(tiempoRef.current!.querySelectorAll('.anim-row'), {
-            x: -30, opacity: 0, duration: 0.6, stagger: 0.15, ease: 'power3.out',
-            scrollTrigger: { trigger: tiempoRef.current, start: 'top 80%' },
-          })
-          // Steps
-          gsap.from(pasosRef.current!.querySelectorAll('.anim-step'), {
-            y: 30, opacity: 0, duration: 0.6, stagger: 0.15, ease: 'power3.out',
-            scrollTrigger: { trigger: pasosRef.current, start: 'top 80%' },
-          })
-        })
-      })
-    )
-    return () => ctx?.revert()
+    const ctx = gsap.context(() => {
+      // Hero (Entrada inmediata con fromTo)
+      gsap.fromTo(heroRef.current!.querySelectorAll('.anim-hero > *'), 
+        { y: 30, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, stagger: 0.15, ease: 'power4.out' }
+      )
+      
+      // Cards (ScrollTrigger con fromTo)
+      gsap.fromTo(cardsRef.current!.querySelectorAll('.anim-card'), 
+        { y: 40, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.7, stagger: 0.12, ease: 'back.out(1.4)',
+          scrollTrigger: { 
+            trigger: cardsRef.current, 
+            start: 'top 90%',
+            toggleActions: 'play none none none' 
+          }
+        }
+      )
+      
+      // Filas de Tiempos
+      if (tiempoRef.current) {
+        gsap.fromTo(tiempoRef.current.querySelectorAll('.anim-row'), 
+          { x: -30, opacity: 0 },
+          { x: 0, opacity: 1, duration: 0.6, stagger: 0.15, ease: 'power3.out',
+            scrollTrigger: { 
+              trigger: tiempoRef.current, 
+              start: 'top 85%',
+              toggleActions: 'play none none none'
+            }
+          }
+        )
+      }
+      
+      // Pasos
+      if (pasosRef.current) {
+        gsap.fromTo(pasosRef.current.querySelectorAll('.anim-step'), 
+          { y: 30, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.6, stagger: 0.15, ease: 'power3.out',
+            scrollTrigger: { 
+              trigger: pasosRef.current, 
+              start: 'top 85%',
+              toggleActions: 'play none none none'
+            }
+          }
+        )
+      }
+
+      // Refrescar para asegurar cálculos correctos
+      ScrollTrigger.refresh()
+    })
+
+    return () => ctx.revert()
   }, [])
+
 
   return (
     <main className="bg-[#fbf9f8] min-h-screen">

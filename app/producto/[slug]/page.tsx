@@ -135,7 +135,7 @@ export default async function ProductoPage({ params }: Props) {
                 <div className="relative aspect-square bg-[#F5F5F5]">
                   {(p.imagenes as string[])?.[0] && (
                     <img src={(p.imagenes as string[])[0]} alt={p.titulo}
-                      className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform" />
+                      className="absolute inset-0 w-full h-full object-contain p-4 group-hover:scale-105 transition-transform" />
                   )}
                 </div>
                 <div className="p-3">
