@@ -1,11 +1,46 @@
 export const dynamic = 'force-dynamic'
 
+import type { Metadata } from 'next'
 import { db, schema } from '@/lib/db'
 import { eq, and, ne } from 'drizzle-orm'
 import { notFound } from 'next/navigation'
 import ProductImages from '@/components/product/ProductImages'
 import ProductInfo from '@/components/product/ProductInfo'
 import Link from 'next/link'
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params
+  const [p] = await db.select({
+    titulo: schema.productos.titulo,
+    descripcion: schema.productos.descripcion,
+    bullets: schema.productos.bullets,
+    imagenes: schema.productos.imagenes,
+    precio: schema.productos.precio,
+    marca: schema.productos.marca,
+  }).from(schema.productos)
+    .where(and(eq(schema.productos.slug, slug), eq(schema.productos.activo, true)))
+    .limit(1)
+
+  if (!p) return {}
+
+  const bullets = (p.bullets as string[]) ?? []
+  const desc = bullets[0]
+    ? `${bullets[0].slice(0, 145)}. Envío a todo México.`
+    : `Compra ${p.titulo} en Capalsa. Producto importado desde USA con envío garantizado a todo México.`
+
+  const imagen = (p.imagenes as string[])?.[0]
+
+  return {
+    title: p.titulo,
+    description: desc,
+    openGraph: {
+      title: p.titulo,
+      description: desc,
+      images: imagen ? [{ url: imagen, alt: p.titulo }] : [],
+      type: 'website',
+    },
+  }
+}
 
 /**
  * Limpia el campo descripcion de Amazon:
@@ -62,8 +97,48 @@ export default async function ProductoPage({ params }: Props) {
         .limit(4)
     : []
 
+  const reviews = Array.isArray(producto.reviews) ? (producto.reviews as any[]) : []
+  const BASE = 'https://www.capalsa.com'
+
+  const productJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: producto.titulo,
+    image: (producto.imagenes as string[]) ?? [],
+    description: cleanDescription(producto.descripcion) ?? producto.titulo,
+    ...(producto.marca ? { brand: { '@type': 'Brand', name: producto.marca } } : {}),
+    offers: {
+      '@type': 'Offer',
+      price: Number(producto.precio).toFixed(2),
+      priceCurrency: 'MXN',
+      availability: 'https://schema.org/InStock',
+      url: `${BASE}/producto/${producto.slug}`,
+      seller: { '@type': 'Organization', name: 'Capalsa Store' },
+    },
+    ...(reviews.length > 0 ? {
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: '5',
+        reviewCount: String(reviews.length),
+      },
+    } : {}),
+  }
+
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Inicio', item: BASE },
+      ...(categoria ? [{ '@type': 'ListItem', position: 2, name: categoria.nombre, item: `${BASE}/categoria/${categoria.slug}` }] : []),
+      { '@type': 'ListItem', position: categoria ? 3 : 2, name: producto.titulo, item: `${BASE}/producto/${producto.slug}` },
+    ],
+  }
+
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
+
       {/* Breadcrumb */}
       <nav className="text-xs text-[#6B6B6B] mb-6 flex items-center gap-1">
         <Link href="/" className="hover:text-[#C4813A]">Inicio</Link>

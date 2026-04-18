@@ -1,5 +1,6 @@
-export const revalidate = 600 // Revalidar cada 10 minutos
+export const revalidate = 600
 
+import type { Metadata } from 'next'
 import { db, schema } from '@/lib/db'
 import { eq, and, gte, lte, asc, desc } from 'drizzle-orm'
 import { notFound } from 'next/navigation'
@@ -10,6 +11,23 @@ import Link from 'next/link'
 interface Props {
   params: Promise<{ slug: string }>
   searchParams: Promise<{ marca?: string; min?: string; max?: string; orden?: string }>
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params
+  const [cat] = await db.select({ nombre: schema.categorias.nombre })
+    .from(schema.categorias).where(eq(schema.categorias.slug, slug)).limit(1)
+
+  if (!cat) return {}
+
+  return {
+    title: `${cat.nombre} — Productos importados de USA`,
+    description: `Encuentra los mejores productos de ${cat.nombre} importados directamente desde Amazon USA. Envío garantizado a todo México en 7–9 días hábiles. Facturación CFDI.`,
+    openGraph: {
+      title: `${cat.nombre} | Capalsa Store`,
+      description: `Explora nuestra selección de ${cat.nombre} importados de USA con envío a todo México.`,
+    },
+  }
 }
 
 export default async function CategoriaPage({ params, searchParams }: Props) {
@@ -59,8 +77,19 @@ export default async function CategoriaPage({ params, searchParams }: Props) {
 
   const hayFiltros = !!(filtros.marca || filtros.min || filtros.max)
 
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Inicio', item: 'https://www.capalsa.com' },
+      { '@type': 'ListItem', position: 2, name: categoria.nombre, item: `https://www.capalsa.com/categoria/${categoria.slug}` },
+    ],
+  }
+
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
+
       {/* Breadcrumb */}
       <nav className="text-xs text-[#6B6B6B] mb-4 flex items-center gap-1">
         <Link href="/" className="hover:text-[#C4813A]">Inicio</Link>
