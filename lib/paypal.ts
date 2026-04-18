@@ -46,13 +46,15 @@ export async function createPayPalOrder(items: any[], subtotal: number) {
     },
     body: JSON.stringify({
       intent: 'CAPTURE',
+      application_context: {
+        shipping_preference: 'NO_SHIPPING', // ya recopilamos dirección en nuestro form
+      },
       purchase_units: [
         {
           amount: {
             currency_code: 'MXN',
             value: subtotal.toFixed(2),
           },
-          // Podríamos agregar item_list aquí para que el detalle aparezca en PayPal
         },
       ],
     }),
