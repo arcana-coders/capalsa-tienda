@@ -6,7 +6,7 @@ import { eq, inArray } from 'drizzle-orm';
 
 export async function POST(request: Request) {
   try {
-    const { items } = await request.json();
+    const { items, clienteData } = await request.json();
 
     if (!items || items.length === 0) {
       return NextResponse.json({ error: 'Carrito vacío' }, { status: 400 });
@@ -27,7 +27,7 @@ export async function POST(request: Request) {
     // En Capalsa el envío es gratis nacional
     const total = subtotal;
 
-    const order = await createPayPalOrder(items, total);
+    const order = await createPayPalOrder(items, total, clienteData);
 
     return NextResponse.json(order);
   } catch (error) {

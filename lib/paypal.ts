@@ -35,8 +35,27 @@ export async function getPayPalAccessToken() {
 /**
  * Crea una orden en PayPal
  */
-export async function createPayPalOrder(items: any[], subtotal: number) {
+export async function createPayPalOrder(items: any[], subtotal: number, clienteData?: any) {
   const accessToken = await getPayPalAccessToken();
+
+  // Pre-cargar datos del comprador para que PayPal no pida dirección de facturación
+  let payer: Record<string, any> | undefined;
+  if (clienteData?.nombre) {
+    const parts = clienteData.nombre.trim().split(' ');
+    const givenName = parts[0] || 'Cliente';
+    const surname = parts.slice(1).join(' ') || '.';
+    payer = {
+      name: { given_name: givenName, surname },
+      ...(clienteData.email && { email_address: clienteData.email }),
+      address: {
+        address_line_1: [clienteData.calle, clienteData.numExt].filter(Boolean).join(' '),
+        admin_area_2: clienteData.ciudad || '',
+        admin_area_1: clienteData.estado || '',
+        postal_code: clienteData.cp || '',
+        country_code: 'MX',
+      },
+    };
+  }
 
   const response = await fetch(`${BASE_URL}/v2/checkout/orders`, {
     method: 'POST',
@@ -47,8 +66,9 @@ export async function createPayPalOrder(items: any[], subtotal: number) {
     body: JSON.stringify({
       intent: 'CAPTURE',
       application_context: {
-        shipping_preference: 'NO_SHIPPING', // ya recopilamos dirección en nuestro form
+        shipping_preference: 'NO_SHIPPING',
       },
+      ...(payer && { payer }),
       purchase_units: [
         {
           amount: {

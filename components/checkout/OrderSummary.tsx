@@ -115,16 +115,26 @@ export default function OrderSummary({ paymentMethod, setPaymentMethod, clienteD
                   height: 50
                 }}
                 disabled={isProcessing}
+                onClick={() => {
+                  document.body.style.overflow = 'hidden';
+                }}
+                onCancel={() => {
+                  document.body.style.overflow = '';
+                }}
+                onError={() => {
+                  document.body.style.overflow = '';
+                }}
                 createOrder={async () => {
                   const res = await fetch("/api/checkout/paypal/create-order", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ items }),
+                    body: JSON.stringify({ items, clienteData }),
                   });
                   const order = await res.json();
                   return order.id;
                 }}
                 onApprove={async (data) => {
+                  document.body.style.overflow = '';
                   setIsProcessing(true);
                   try {
                     const res = await fetch("/api/checkout/paypal/capture-order", {
