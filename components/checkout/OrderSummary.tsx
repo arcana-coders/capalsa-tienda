@@ -1,8 +1,17 @@
+'use client'
+
 import { useCartStore } from '@/lib/store'
-import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js"
+import {
+  PayPalScriptProvider,
+  PayPalButtons,
+  PayPalCardFieldsProvider,
+  PayPalNumberField,
+  PayPalExpiryField,
+  PayPalCVVField,
+  usePayPalCardFields,
+} from "@paypal/react-paypal-js"
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-
 
 const IconPayPal = () => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -11,18 +20,53 @@ const IconPayPal = () => (
   </svg>
 )
 
+const fieldStyle: Record<string, object> = {
+  input: {
+    'font-family': "'Plus Jakarta Sans', sans-serif",
+    'font-size': '14px',
+    color: '#1b1c1c',
+    padding: '14px 16px',
+  },
+  '.invalid': { color: '#dc2626' },
+}
+
+const fieldContainerClass =
+  'bg-[#f5f3f3] rounded-2xl overflow-hidden border border-[#c4c8ce]/10 h-[52px]'
+
+// Separate component — usePayPalCardFields must be inside PayPalCardFieldsProvider
+function CardSubmitButton({ label, isProcessing }: { label: string; isProcessing: boolean }) {
+  const { cardFieldsForm } = usePayPalCardFields()
+
+  return (
+    <button
+      type="button"
+      disabled={isProcessing || !cardFieldsForm}
+      onClick={() => cardFieldsForm?.submit()}
+      className="w-full py-5 bg-[#00386c] hover:bg-[#1a4f8b] disabled:opacity-60 disabled:cursor-not-allowed text-white font-black rounded-2xl text-sm transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+    >
+      {isProcessing ? (
+        <>
+          <svg className="animate-spin" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+          Procesando...
+        </>
+      ) : (
+        <>
+          {label}
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </>
+      )}
+    </button>
+  )
+}
+
 export default function OrderSummary({ paymentMethod, setPaymentMethod, clienteData }: any) {
   const { items, clearCart } = useCartStore() as any
   const router = useRouter()
   const [isProcessing, setIsProcessing] = useState(false)
+  const [showCardForm, setShowCardForm] = useState(false)
 
-  // Precios seguros y sumatoria manual para evitar errores del store
   const subtotal = items.reduce((sum: number, i: any) => sum + (Number(i.precio) * i.cantidad), 0)
-
-  // En Capalsa el envío siempre es gratis nacional
-  const shippingTotal = 0
-
-  const grandTotal = subtotal + shippingTotal
+  const grandTotal = subtotal
 
   const formatPrice = (n: number) =>
     n.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' })
@@ -31,11 +75,45 @@ export default function OrderSummary({ paymentMethod, setPaymentMethod, clienteD
     clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || "",
     currency: "MXN",
     intent: "capture",
+    components: "buttons,card-fields",
+  }
+
+  const handleCreateOrder = async () => {
+    const res = await fetch("/api/checkout/paypal/create-order", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ items, clienteData }),
+    })
+    const order = await res.json()
+    return order.id
+  }
+
+  const handleCapture = async (orderID: string) => {
+    setIsProcessing(true)
+    try {
+      const res = await fetch("/api/checkout/paypal/capture-order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ orderID, clienteData }),
+      })
+      const result = await res.json()
+      if (result.status === 'COMPLETED') {
+        clearCart()
+        router.push(`/checkout/exitoso?order=${result.numeroOrden}`)
+      } else {
+        alert('El pago no pudo ser completado. Por favor intenta de nuevo.')
+      }
+    } catch (err) {
+      console.error(err)
+      alert('Hubo un error procesando tu pago.')
+    } finally {
+      setIsProcessing(false)
+    }
   }
 
   return (
     <PayPalScriptProvider options={initialOptions}>
-      <div className="bg-white rounded-[2.5rem] p-8 md:p-10 shadow-[0_15px_40px_-15px_rgba(0,56,108,0.08)] border border-[#c4c8ce]/20 sticky top-6 max-h-[calc(100vh-3rem)] overflow-y-auto">
+      <div className="bg-white rounded-[2.5rem] p-8 md:p-10 shadow-[0_15px_40px_-15px_rgba(0,56,108,0.08)] border border-[#c4c8ce]/20 sticky top-6">
         <h2 className="text-2xl font-black text-[#1b1c1c] mb-8 tracking-tight" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
           Resumen de Compra
         </h2>
@@ -72,9 +150,7 @@ export default function OrderSummary({ paymentMethod, setPaymentMethod, clienteD
           </div>
           <div className="flex justify-between items-center text-sm">
             <span className="text-[#74787e] font-medium">Envío Gratis Nacional</span>
-            <span className="text-[#43673c] font-bold uppercase tracking-widest text-[10px]">
-              ¡Gratis!
-            </span>
+            <span className="text-[#43673c] font-bold uppercase tracking-widest text-[10px]">¡Gratis!</span>
           </div>
         </div>
 
@@ -85,84 +161,92 @@ export default function OrderSummary({ paymentMethod, setPaymentMethod, clienteD
           </span>
         </div>
 
-        {/* Método de Pago (Solo PayPal por ahora) */}
-        <div className="mt-6 space-y-3">
-          <span className="text-[10px] font-black text-[#74787e] uppercase tracking-[0.2em] mb-2 block">Método de Pago</span>
-          
-          <div
-            className="w-full p-4 rounded-2xl flex items-center justify-between border-2 border-[#003087] bg-[#003087]/5 shadow-sm"
-          >
-            <div className="flex items-center gap-3">
-              <IconPayPal />
-              <span className="text-sm font-bold text-[#1b1c1c]">PayPal / Tarjeta débito o crédito</span>
-            </div>
-            <div className="w-4 h-4 rounded-full bg-[#003087] flex items-center justify-center">
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="4"><polyline points="20 6 9 17 4 12"/></svg>
-            </div>
-          </div>
-        </div>
+        {/* Método de Pago */}
+        <div className="mt-6">
+          <span className="text-[10px] font-black text-[#74787e] uppercase tracking-[0.2em] mb-4 block">Método de Pago</span>
 
-        {/* Botones de Acción */}
-        <div className="mt-8">
-          {paymentMethod === 'paypal' ? (
-            <div className="relative">
-              <PayPalButtons
-                style={{ 
-                  layout: "vertical", 
-                  color: "blue", 
-                  shape: "rect", 
-                  label: "pay",
-                  height: 50
-                }}
-                disabled={isProcessing}
-                onClick={() => {
-                  document.body.style.overflow = 'hidden';
-                }}
-                onCancel={() => {
-                  document.body.style.overflow = '';
-                }}
-                onError={() => {
-                  document.body.style.overflow = '';
-                }}
-                createOrder={async () => {
-                  const res = await fetch("/api/checkout/paypal/create-order", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ items, clienteData }),
-                  });
-                  const order = await res.json();
-                  return order.id;
-                }}
-                onApprove={async (data) => {
-                  document.body.style.overflow = '';
-                  setIsProcessing(true);
-                  try {
-                    const res = await fetch("/api/checkout/paypal/capture-order", {
-                      method: "POST",
-                      headers: { "Content-Type": "application/json" },
-                      body: JSON.stringify({ orderID: data.orderID, clienteData }),
-                    });
-                    const result = await res.json();
-                    if (result.status === 'COMPLETED') {
-                      clearCart();
-                      router.push(`/checkout/exitoso?order=${result.numeroOrden}`);
-                    } else {
-                      alert('El pago no pudo ser completado. Por favor intenta de nuevo.');
-                    }
-                  } catch (err) {
-                    console.error(err);
-                    alert('Hubo un error procesando tu pago.');
-                  } finally {
-                    setIsProcessing(false);
-                  }
-                }}
-              />
+          <div className="space-y-3">
+            {/* PayPal wallet */}
+            <PayPalButtons
+              fundingSource="paypal"
+              style={{ layout: "horizontal", color: "blue", shape: "rect", label: "pay", height: 50 }}
+              disabled={isProcessing}
+              createOrder={handleCreateOrder}
+              onApprove={async (data) => handleCapture(data.orderID)}
+            />
+
+            {/* Divider */}
+            <div className="flex items-center gap-3 py-1">
+              <div className="flex-1 h-px bg-[#c4c8ce]/30" />
+              <span className="text-[10px] text-[#74787e] font-bold uppercase tracking-widest">o</span>
+              <div className="flex-1 h-px bg-[#c4c8ce]/30" />
             </div>
-          ) : (
-            <div className="text-center p-4 bg-amber-50 rounded-2xl border border-amber-100 italic text-[11px] text-amber-800">
-              Error: Selecciona un método de pago funcional
-            </div>
-          )}
+
+            {/* Botón tarjeta */}
+            <button
+              type="button"
+              onClick={() => setShowCardForm(v => !v)}
+              className="w-full py-[14px] bg-[#1b1c1c] hover:bg-[#333] text-white font-bold rounded-2xl text-sm transition-all flex items-center justify-center gap-3"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+              Tarjeta de débito o crédito
+              <svg
+                className={`ml-auto transition-transform duration-200 ${showCardForm ? 'rotate-180' : ''}`}
+                width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"
+              >
+                <polyline points="6 9 12 15 18 9"/>
+              </svg>
+            </button>
+
+            {/* Form de tarjeta (PayPal CardFields sin billing address) */}
+            {showCardForm && (
+              <PayPalCardFieldsProvider
+                createOrder={handleCreateOrder}
+                onApprove={async ({ orderID }) => handleCapture(orderID)}
+                onError={(err) => {
+                  console.error('PayPal CardFields error:', err)
+                  setIsProcessing(false)
+                  alert('Error al procesar la tarjeta. Verifica los datos e intenta de nuevo.')
+                }}
+                style={fieldStyle}
+              >
+                <div className="bg-[#fbf9f8] rounded-2xl p-5 border border-[#c4c8ce]/15 space-y-4 mt-1">
+                  <div>
+                    <label className="text-[10px] font-black text-[#74787e] uppercase tracking-[0.15em] mb-2 block">
+                      Número de tarjeta
+                    </label>
+                    <div className={fieldContainerClass}>
+                      <PayPalNumberField />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="text-[10px] font-black text-[#74787e] uppercase tracking-[0.15em] mb-2 block">
+                        Vencimiento
+                      </label>
+                      <div className={fieldContainerClass}>
+                        <PayPalExpiryField />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="text-[10px] font-black text-[#74787e] uppercase tracking-[0.15em] mb-2 block">
+                        CVV
+                      </label>
+                      <div className={fieldContainerClass}>
+                        <PayPalCVVField />
+                      </div>
+                    </div>
+                  </div>
+
+                  <CardSubmitButton
+                    label={`Pagar ${formatPrice(grandTotal)}`}
+                    isProcessing={isProcessing}
+                  />
+                </div>
+              </PayPalCardFieldsProvider>
+            )}
+          </div>
         </div>
 
         {/* Garantía */}
