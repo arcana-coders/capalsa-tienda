@@ -94,7 +94,7 @@ export default function OrderSummary({ paymentMethod, setPaymentMethod, clienteD
       const res = await fetch("/api/checkout/paypal/capture-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ orderID, clienteData }),
+        body: JSON.stringify({ orderID, clienteData, items, total: grandTotal }),
       })
       const result = await res.json()
       if (result.status === 'COMPLETED') {

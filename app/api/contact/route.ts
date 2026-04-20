@@ -20,7 +20,7 @@ export async function POST(request: Request) {
       const resend = new Resend(process.env.RESEND_API_KEY)
       await resend.emails.send({
         from: 'Capalsa <contacto@capalsa.com>',
-        to: ['ryscarrillo@gmail.com'],
+        to: ['contacto@capalsa.com'],
         subject: `[Contacto] ${asunto} — ${nombre}`,
         text: `Nuevo mensaje de contacto:\n\nNombre: ${nombre}\nEmail: ${email}\nAsunto: ${asunto}\n\nMensaje:\n${mensaje}`,
       }).catch(err => console.error('Resend contact error:', err))

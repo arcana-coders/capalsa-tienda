@@ -30,10 +30,10 @@ export async function sendOrderConfirmation({
       }),
     });
 
-    // También enviamos una copia a Arturo (Master)
+    // Copia de nueva venta a la cuenta de negocio
     await resend.emails.send({
       from: 'Capalsa <contacto@capalsa.com>',
-      to: ['ryscarrillo@gmail.com'], // Email principal de Arturo segun perfil
+      to: ['contacto@capalsa.com'],
       subject: `NUEVA VENTA: ${orderNumber}`,
       text: `Se ha recibido un nuevo pedido de ${customerName} por un total de ${total} MXN.`,
     });
