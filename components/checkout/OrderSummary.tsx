@@ -258,6 +258,22 @@ export default function OrderSummary({ paymentMethod, setPaymentMethod, clienteD
             Tu compra está protegida por nuestra <span className="text-[#00386c]">Garantía de Satisfacción Capalsa</span>.
           </p>
         </div>
+
+        {/* Trust Badges */}
+        <div className="mt-6 pt-6 border-t border-[#c4c8ce]/10">
+          <div className="bg-[#fbf9f8] rounded-2xl p-5 border border-[#c4c8ce]/10 flex flex-col items-center">
+            <div className="flex flex-wrap justify-center items-center gap-4 w-full mb-3">
+              <img src="/images/badge-verisign.png" alt="Verisign" className="h-10 w-auto object-contain" />
+              <img src="/images/badge-paypal.png" alt="PayPal" className="h-10 w-auto object-contain" />
+              <img src="/images/badge-truste.png" alt="TRUSTe" className="h-10 w-auto object-contain" />
+              <img src="/images/badge-ssl.png" alt="SSL" className="h-10 w-auto object-contain" />
+            </div>
+            <p className="text-[9px] font-black text-[#74787e] uppercase tracking-[0.2em] mb-3 text-center">Pago 100% Seguro</p>
+            <p className="text-[10px] font-bold text-[#44494e] leading-tight text-center px-2 border-t border-[#c4c8ce]/10 pt-3">
+              Tu compra está protegida por encriptación SSL de 256 bits y procesadores de pago certificados.
+            </p>
+          </div>
+        </div>
       </div>
     </PayPalScriptProvider>
   )

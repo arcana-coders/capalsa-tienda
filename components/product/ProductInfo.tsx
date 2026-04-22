@@ -223,6 +223,17 @@ export default function ProductInfo({ producto }: { producto: Producto }) {
           Compra 100% protegida y garantizada
         </p>
       </div>
+
+      {/* Trust Badges */}
+      <div className="pt-4 border-t border-[#c4c8ce]/20 flex flex-col items-center w-full">
+        <div className="flex flex-wrap justify-center items-center gap-4 w-full">
+          <img src="/images/badge-verisign.png" alt="Verisign" className="h-10 w-auto object-contain" />
+          <img src="/images/badge-paypal.png" alt="PayPal" className="h-10 w-auto object-contain" />
+          <img src="/images/badge-truste.png" alt="TRUSTe" className="h-10 w-auto object-contain" />
+          <img src="/images/badge-ssl.png" alt="SSL" className="h-10 w-auto object-contain" />
+        </div>
+        <p className="text-[9px] font-black text-[#74787e] uppercase tracking-[0.2em] mt-3 text-center w-full">Pago 100% Seguro con Encriptación SSL</p>
+      </div>
     </div>
   )
 }
