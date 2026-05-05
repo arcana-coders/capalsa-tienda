@@ -43,6 +43,7 @@ export default function Footer() {
         <div className="space-y-3">
           <h4 className="text-xs font-bold text-[#00386c] uppercase tracking-[0.15em] mb-4">Empresa</h4>
           <ul className="space-y-2.5 text-sm">
+            <li><Link href="/nosotros" className="text-[#44494e] hover:text-[#00386c] transition-colors underline-offset-4 hover:underline">Quiénes somos</Link></li>
             <li><Link href="/envios" className="text-[#44494e] hover:text-[#00386c] transition-colors underline-offset-4 hover:underline">Envíos y entregas</Link></li>
             <li><Link href="/devoluciones" className="text-[#44494e] hover:text-[#00386c] transition-colors underline-offset-4 hover:underline">Devoluciones</Link></li>
             <li><Link href="/contacto" className="text-[#44494e] hover:text-[#00386c] transition-colors underline-offset-4 hover:underline">Contacto</Link></li>
