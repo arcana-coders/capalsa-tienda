@@ -46,6 +46,7 @@ export default function Footer() {
             <li><Link href="/envios" className="text-[#44494e] hover:text-[#00386c] transition-colors underline-offset-4 hover:underline">Envíos y entregas</Link></li>
             <li><Link href="/devoluciones" className="text-[#44494e] hover:text-[#00386c] transition-colors underline-offset-4 hover:underline">Devoluciones</Link></li>
             <li><Link href="/contacto" className="text-[#44494e] hover:text-[#00386c] transition-colors underline-offset-4 hover:underline">Contacto</Link></li>
+            <li><Link href="/aviso-de-privacidad" className="text-[#44494e] hover:text-[#00386c] transition-colors underline-offset-4 hover:underline">Aviso de privacidad</Link></li>
             <li>
               <a
                 href={`https://wa.me/${WA_NUMBER}?text=${WA_MESSAGE}`}
@@ -129,7 +130,7 @@ export default function Footer() {
       {/* Bottom bar */}
       <div className="border-t border-[#c4c8ce]/20 py-5 px-6">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-[#74787e]">
-          <span>© {year} Capalsa Store · Todos los derechos reservados. Facturación completa disponible.</span>
+          <span>© {year} Capalsa Store · Todos los derechos reservados · <Link href="/aviso-de-privacidad" className="hover:text-[#00386c] transition-colors">Aviso de privacidad</Link></span>
           <span>
             Hecho con ❤️ por{' '}
             <a href="https://tecnomata.com" target="_blank" rel="noopener noreferrer" className="hover:text-[#00386c] transition-colors">

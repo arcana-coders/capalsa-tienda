@@ -8,6 +8,8 @@ import ProductCard from '@/components/catalog/ProductCard'
 import HeroSection from '@/components/home/HeroSection'
 import TrustBar from '@/components/home/TrustBar'
 import OfertasDelDia from '@/components/home/OfertasDelDia'
+import TestimonialsSection from '@/components/home/TestimonialsSection'
+import FAQSection from '@/components/home/FAQSection'
 
 async function getDestacados() {
   try {
@@ -262,7 +264,13 @@ export default async function HomePage() {
         </section>
       ) : null}
 
-      {/* 6. Banner Editorial — Diferencial Capalsa */}
+      {/* 6. Testimonios */}
+      <TestimonialsSection />
+
+      {/* 7. FAQ */}
+      <FAQSection />
+
+      {/* 8. Banner Editorial — Diferencial Capalsa */}
       <section className="max-w-7xl mx-auto px-4 py-16 scroll-mt-20">
         <div className="bg-[#00386c] rounded-3xl overflow-hidden shadow-2xl">
           <div className="grid grid-cols-1 lg:grid-cols-2">

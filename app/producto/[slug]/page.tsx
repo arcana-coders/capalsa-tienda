@@ -6,6 +6,7 @@ import { eq, and, ne } from 'drizzle-orm'
 import { notFound } from 'next/navigation'
 import ProductImages from '@/components/product/ProductImages'
 import ProductInfo from '@/components/product/ProductInfo'
+import ProductAccordion from '@/components/product/ProductAccordion'
 import Link from 'next/link'
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -155,18 +156,14 @@ export default async function ProductoPage({ params }: Props) {
       {/* Producto principal */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
         <ProductImages imagenes={(producto.imagenes as string[]) ?? []} titulo={producto.titulo} />
-        <ProductInfo producto={producto as any} />
-      </div>
-
-      {/* Descripción — se limpia el HTML antes de mostrar */}
-      {cleanDescription(producto.descripcion) && (
-        <div className="mt-12 border-t border-[#E0E0E0] pt-8">
-          <h2 className="text-lg font-bold text-[#1A1A1A] mb-4">Descripción del producto</h2>
-          <p className="text-sm text-[#6B6B6B] leading-relaxed whitespace-pre-line max-w-3xl">
-            {cleanDescription(producto.descripcion)!.replace(/\bAmazon\.com\b/gi, 'Capalsa').replace(/\bAmazon\b/gi, 'Capalsa')}
-          </p>
+        <div className="flex flex-col">
+          <ProductInfo producto={producto as any} />
+          <ProductAccordion
+            descripcion={cleanDescription(producto.descripcion)?.replace(/\bAmazon\.com\b/gi, 'Capalsa').replace(/\bAmazon\b/gi, 'Capalsa')}
+            bullets={producto.bullets as string[] | null}
+          />
         </div>
-      )}
+      </div>
 
       {/* Reviews */}
       {Array.isArray(producto.reviews) && (producto.reviews as any[]).length > 0 && (
