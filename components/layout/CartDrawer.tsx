@@ -16,7 +16,7 @@ export default function CartDrawer() {
       {/* Overlay */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-[#001c36]/40 backdrop-blur-sm z-40 transition-opacity"
+          className="fixed inset-0 bg-[#001c36]/60 z-40 transition-opacity"
           onClick={closeCart}
         />
       )}
@@ -123,7 +123,7 @@ export default function CartDrawer() {
             <Link
               href="/checkout"
               onClick={closeCart}
-              className="group relative block w-full py-5 bg-[#00386c] hover:bg-[#1a4f8b] text-white font-black rounded-2xl text-center text-sm transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 overflow-hidden"
+              className="group relative block w-full py-5 bg-[#00386c] hover:bg-[#1a4f8b] text-white font-black rounded-2xl text-center text-sm transition-all shadow-lg hover:shadow-xl active:scale-95 hover:-translate-y-0.5 overflow-hidden"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
               <span className="relative z-10 flex items-center justify-center gap-2">

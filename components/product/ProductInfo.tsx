@@ -171,12 +171,12 @@ export default function ProductInfo({ producto }: { producto: Producto }) {
           <div className="flex items-center bg-[#f5f3f3] rounded-xl p-1 border border-[#c4c8ce]/20">
             <button
               onClick={() => setCantidad(c => Math.max(1, c - 1))}
-              className="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-white text-lg font-bold transition-all text-[#00386c]"
+              className="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-white text-lg font-bold transition-all duration-200 active:scale-90 text-[#00386c]"
             >−</button>
             <span className="w-10 text-center text-sm font-black text-[#1b1c1c]">{cantidad}</span>
             <button
               onClick={() => setCantidad(c => c + 1)}
-              className="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-white text-lg font-bold transition-all text-[#00386c]"
+              className="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-white text-lg font-bold transition-all duration-200 active:scale-90 text-[#00386c]"
             >+</button>
           </div>
         </div>
@@ -187,7 +187,7 @@ export default function ProductInfo({ producto }: { producto: Producto }) {
         <ul className="space-y-3 pt-2">
           {bullets.slice(0, 5).map((b: string, i: number) => (
             <li key={i} className="flex gap-3 text-sm text-[#1b1c1c] leading-relaxed group">
-              <span className="flex-shrink-0 w-5 h-5 rounded-full bg-[#f5f3f3] border border-[#c4c8ce]/30 flex items-center justify-center text-[#43673c] group-hover:bg-[#c1ebb5]/40 transition-colors">
+              <span className="flex-shrink-0 w-5 h-5 rounded-full bg-[#f5f3f3] border border-[#c4c8ce]/30 flex items-center justify-center text-[#43673c] group-hover:bg-[#c1ebb5]/40 group-hover:scale-110 transition-all duration-300">
                 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                   <polyline points="20 6 9 17 4 12"/>
                 </svg>
@@ -203,7 +203,7 @@ export default function ProductInfo({ producto }: { producto: Producto }) {
         <button
           onClick={handleAgregar}
           className={`
-            w-full py-4.5 rounded-2xl font-black text-sm transition-all duration-300 flex items-center justify-center gap-2.5 shadow-lg
+            w-full py-4.5 rounded-2xl font-black text-sm transition-all duration-300 ease-out flex items-center justify-center gap-2.5 shadow-lg active:scale-95
             ${agregado
               ? 'bg-[#43673c] text-white scale-[0.98]'
               : 'bg-[#00386c] hover:bg-[#1a4f8b] text-white hover:shadow-xl hover:-translate-y-0.5'

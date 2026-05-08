@@ -81,14 +81,14 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const categorias = await getCategorias()
 
   return (
-    <html lang="es" className={`h-full antialiased ${plusJakarta.variable} ${inter.variable}`}>
+    <html lang="es" className={`h-full antialiased ${plusJakarta.variable} ${inter.variable}`} suppressHydrationWarning>
       <head>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(ORG_JSON_LD) }}
         />
       </head>
-      <body suppressHydrationWarning className="min-h-full flex flex-col bg-[#fbf9f8] text-[#1b1c1c]">
+      <body suppressHydrationWarning className="min-h-full flex flex-col bg-surface text-foreground">
         <AnnouncementBar />
         <Header initialCategories={categorias} />
         <div className="flex-1">{children}</div>

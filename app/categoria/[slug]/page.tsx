@@ -123,7 +123,7 @@ export default async function CategoriaPage({ params, searchParams }: Props) {
             </div>
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {productos.map((p: any) => <ProductCard key={p.id} producto={p} />)}
+              {productos.map((p: any, i: number) => <ProductCard key={p.id} producto={p} priority={i < 4} />)}
             </div>
           )}
         </div>

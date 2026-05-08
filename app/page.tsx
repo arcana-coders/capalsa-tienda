@@ -175,7 +175,7 @@ export default async function HomePage() {
   const masVendidos = destacados.slice(5)
 
   return (
-    <main className="bg-[#fbf9f8]">
+    <main className="bg-surface">
       {/* 1. Hero asimétrico */}
       <HeroSection />
 
@@ -192,14 +192,14 @@ export default async function HomePage() {
         <div className="flex items-end justify-between mb-6">
           <div>
             <h2
-              className="text-2xl font-black text-[#1b1c1c]"
+              className="text-2xl font-black text-foreground"
               style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
             >
               Comprar por categoría
             </h2>
-            <p className="text-sm text-[#44494e] mt-0.5">Encuentra exactamente lo que necesitas</p>
+            <p className="text-sm text-on-surface-variant mt-0.5">Encuentra exactamente lo que necesitas</p>
           </div>
-          <Link href="/categorias" className="text-sm font-semibold text-[#00386c] hover:text-[#1a4f8b] transition-colors">
+          <Link href="/categorias" className="text-sm font-semibold text-primary hover:text-primary-container transition-colors">
             Ver todas →
           </Link>
         </div>
@@ -211,12 +211,12 @@ export default async function HomePage() {
               <Link
                 key={cat.id}
                 href={href}
-                className="flex flex-col items-center gap-2 p-3 rounded-2xl bg-white hover:bg-[#00386c] hover:text-white group transition-all duration-200 text-center shadow-sm hover:shadow-md"
+                className="flex flex-col items-center gap-2 p-3 rounded-2xl bg-surface-lowest hover:bg-primary hover:text-on-primary group transition-all duration-200 text-center shadow-sm hover:shadow-md"
               >
-                <span className="text-[#43673c] group-hover:text-[#c1ebb5] transition-colors">
+                <span className="text-secondary group-hover:text-secondary-container transition-colors" aria-hidden="true">
                   <IconComp />
                 </span>
-                <span className="text-xs font-semibold text-[#1b1c1c] group-hover:text-white leading-tight transition-colors duration-200">
+                <span className="text-xs font-semibold text-foreground group-hover:text-on-primary leading-tight transition-colors duration-200">
                   {cat.nombre}
                 </span>
               </Link>
@@ -232,14 +232,14 @@ export default async function HomePage() {
             <div className="flex items-end justify-between mb-6">
               <div>
                 <h2
-                  className="text-2xl font-black text-[#1b1c1c]"
+                  className="text-2xl font-black text-foreground"
                   style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
                 >
                   Más vendidos
                 </h2>
-                <p className="text-sm text-[#44494e] mt-0.5">Los favoritos de nuestros clientes</p>
+                <p className="text-sm text-on-surface-variant mt-0.5">Los favoritos de nuestros clientes</p>
               </div>
-              <Link href="/categorias" className="text-sm font-semibold text-[#00386c] hover:text-[#1a4f8b] transition-colors">
+              <Link href="/categorias" className="text-sm font-semibold text-primary hover:text-primary-container transition-colors">
                 Ver todos →
               </Link>
             </div>
@@ -257,9 +257,9 @@ export default async function HomePage() {
         </section>
       ) : destacados.length === 0 ? (
         <section className="max-w-7xl mx-auto px-4 py-10 text-center">
-          <div className="bg-white rounded-2xl p-12 shadow-sm">
-            <h2 className="text-xl font-bold mt-4 mb-2 text-[#1b1c1c]">Los productos vienen en camino</h2>
-            <p className="text-[#44494e] text-sm">Estamos cargando nuestro catálogo. Vuelve pronto.</p>
+          <div className="bg-surface-lowest rounded-2xl p-12 shadow-sm">
+            <h2 className="text-xl font-bold mt-4 mb-2 text-foreground">Los productos vienen en camino</h2>
+            <p className="text-on-surface-variant text-sm">Estamos cargando nuestro catálogo. Vuelve pronto.</p>
           </div>
         </section>
       ) : null}
@@ -272,48 +272,66 @@ export default async function HomePage() {
 
       {/* 8. Banner Editorial — Diferencial Capalsa */}
       <section className="max-w-7xl mx-auto px-4 py-16 scroll-mt-20">
-        <div className="bg-[#00386c] rounded-3xl overflow-hidden shadow-2xl">
+        <div className="bg-primary rounded-3xl overflow-hidden shadow-2xl">
           <div className="grid grid-cols-1 lg:grid-cols-2">
-            {/* Imagen/Ilustración Premium */}
-            <div className="relative min-h-[320px] bg-gradient-to-br from-[#00386c] to-[#1a4f8b] p-8 flex items-center justify-center overflow-hidden">
-              <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
-              <div className="relative">
-                {/* SVG Ilustración Importación Premium */}
-                <svg viewBox="0 0 240 240" className="w-56 h-56 drop-shadow-2xl" fill="none">
-                  {/* Círculo de fondo con efecto aura */}
-                  <circle cx="120" cy="120" r="100" fill="white" fillOpacity="0.05" />
-                  <circle cx="120" cy="120" r="80" stroke="white" strokeOpacity="0.1" strokeWidth="2" strokeDasharray="8 8" />
-                  
-                  {/* Escudo/Sello de Garantía */}
-                  <path d="M120 40c-30 0-60 10-60 10v70c0 40 30 70 60 80 30-10 60-40 60-80v-70s-30-10-60-10z" fill="#43673c" fillOpacity="0.9" />
-                  <path d="M120 45c-28 0-55 10-55 10v65c0 38 27 67 55 75 28-8 55-37 55-75v-65s-27-10-55-10z" stroke="white" strokeOpacity="0.3" strokeWidth="1" />
-                  
-                  {/* Checkmark de Verificado */}
-                  <path d="M100 120l15 15 30-30" stroke="white" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" />
-                  
-                  {/* Íconos de Avión y Destino (Efecto Importación) */}
-                  <g opacity="0.8" className="animate-pulse">
-                    <path d="M60 170c-10 0-10 10-20 10m20-10c0-10 10-10 10-20" stroke="#c1ebb5" strokeWidth="2" strokeLinecap="round" />
-                    <path d="M180 70c-10 0-10 10-20 10m20-10c0-10 10-10 10-20" stroke="#c1ebb5" strokeWidth="2" strokeLinecap="round" />
-                  </g>
-                </svg>
-              </div>
+            {/* Panel izquierdo — ilustración de ruta USA→MX */}
+            <div className="relative min-h-[320px] bg-gradient-to-br from-primary to-primary-container p-8 flex items-center justify-center overflow-hidden">
+              <svg viewBox="0 0 300 280" className="w-64 h-64 drop-shadow-2xl" fill="none" aria-hidden="true">
+                {/* Fondo sutil */}
+                <circle cx="150" cy="140" r="120" fill="white" fillOpacity="0.04" />
+                <circle cx="150" cy="140" r="90" stroke="white" strokeOpacity="0.07" strokeWidth="1.5" strokeDasharray="6 6" />
+
+                {/* Paquete — flat isometric */}
+                <path d="M100 120 L150 95 L200 120 L150 145 Z" fill="#1a4f8b" />
+                <path d="M100 120 L100 195 L150 220 L150 145 Z" fill="#00386c" />
+                <path d="M200 120 L200 195 L150 220 L150 145 Z" fill="#0a2d55" />
+                {/* Tape */}
+                <line x1="150" y1="95" x2="150" y2="220" stroke="#c1ebb5" strokeWidth="10" strokeOpacity="0.2" />
+                <line x1="100" y1="157" x2="200" y2="157" stroke="#c1ebb5" strokeWidth="7" strokeOpacity="0.14" />
+
+                {/* Badge USA — esquina superior derecha */}
+                <circle cx="222" cy="82" r="30" fill="white" fillOpacity="0.12" />
+                <circle cx="222" cy="82" r="22" fill="white" fillOpacity="0.18" />
+                <text x="222" y="78" textAnchor="middle" fill="white" fontSize="7" fontWeight="800" letterSpacing="2" fontFamily="'Inter', system-ui, sans-serif">ORIGEN</text>
+                <text x="222" y="92" textAnchor="middle" fill="white" fontSize="13" fontWeight="900" fontFamily="'Plus Jakarta Sans', sans-serif">USA</text>
+
+                {/* Ruta de envío */}
+                <path d="M222 82 C250 130 230 180 100 210" stroke="#c1ebb5" strokeWidth="1.5" strokeDasharray="8 6" strokeOpacity="0.5" fill="none" />
+
+                {/* Avión */}
+                <g transform="translate(200, 145) rotate(135)">
+                  <path d="M0 0 L12 -4 L13 0 L12 4 Z" fill="#c1ebb5" fillOpacity="0.7" />
+                  <path d="M3 -4 L8 -10 L11 -7 L6 -1 Z" fill="#c1ebb5" fillOpacity="0.5" />
+                  <path d="M3 4 L8 10 L11 7 L6 1 Z" fill="#c1ebb5" fillOpacity="0.5" />
+                </g>
+
+                {/* Pin destino */}
+                <g transform="translate(83, 197)">
+                  <path d="M11 0C5 0 0 5 0 11 0 19 11 30 11 30 11 30 22 19 22 11 22 5 17 0 11 0Z" fill="#c1ebb5" fillOpacity="0.9" />
+                  <circle cx="11" cy="11" r="5" fill="#00386c" />
+                </g>
+
+                {/* Puntos decorativos */}
+                <circle cx="60" cy="90" r="3" fill="white" fillOpacity="0.12" />
+                <circle cx="258" cy="200" r="4" fill="white" fillOpacity="0.1" />
+                <circle cx="240" cy="230" r="2" fill="#c1ebb5" fillOpacity="0.3" />
+              </svg>
             </div>
 
             {/* Texto y CTA */}
-            <div className="p-10 lg:p-14 flex flex-col justify-center space-y-8 bg-white lg:bg-transparent">
+            <div className="p-10 lg:p-14 flex flex-col justify-center space-y-8 bg-surface-lowest lg:bg-transparent">
               <div className="space-y-4">
-                <span className="inline-block px-3 py-1 bg-[#c1ebb5] text-[#43673c] text-[10px] font-black uppercase tracking-[0.2em] rounded-full">
+                <span className="inline-block px-3 py-1 bg-secondary-container text-secondary text-[10px] font-black uppercase tracking-[0.2em] rounded-full">
                   Exclusivos USA
                 </span>
                 <h2
-                  className="text-3xl lg:text-5xl font-black text-[#1b1c1c] lg:text-white leading-[1.1]"
+                  className="text-3xl lg:text-5xl font-black text-foreground lg:text-on-primary leading-[1.1]"
                   style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
                 >
                   Lo mejor del mundo, <br className="hidden md:block" />
-                  <span className="text-[#43673c] lg:text-[#c1ebb5]">directo a tu hogar.</span>
+                  <span className="text-secondary lg:text-secondary-container">directo a tu hogar.</span>
                 </h2>
-                <p className="text-[#44494e] lg:text-blue-50/80 leading-relaxed text-sm lg:text-base max-w-lg">
+                <p className="text-on-surface-variant lg:text-on-primary/70 leading-relaxed text-sm lg:text-base max-w-lg">
                   En Capalsa traemos para ti las novedades de Amazon USA que aún no están en México. Con facturación mexicana deducible y entrega garantizada en tu puerta.
                 </p>
               </div>
@@ -326,14 +344,14 @@ export default async function HomePage() {
                   { t: 'Catálogo USA', d: 'Acceso a millones de ítems.' },
                 ].map((item) => (
                   <li key={item.t} className="flex gap-3">
-                    <div className="flex-shrink-0 w-6 h-6 rounded-lg bg-[#f5f3f3] lg:bg-white/10 flex items-center justify-center">
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#43673c" strokeWidth="3" className="lg:stroke-[#c1ebb5]">
+                    <div className="flex-shrink-0 w-6 h-6 rounded-lg bg-surface-low lg:bg-on-primary/10 flex items-center justify-center" aria-hidden="true">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="text-secondary lg:text-secondary-container">
                         <polyline points="20 6 9 17 4 12" />
                       </svg>
                     </div>
                     <div>
-                      <h4 className="text-xs font-bold text-[#1b1c1c] lg:text-white">{item.t}</h4>
-                      <p className="text-[10px] text-[#44494e] lg:text-blue-50/60 leading-tight">{item.d}</p>
+                      <h4 className="text-xs font-bold text-foreground lg:text-on-primary">{item.t}</h4>
+                      <p className="text-[10px] text-on-surface-variant lg:text-on-primary/60 leading-tight">{item.d}</p>
                     </div>
                   </li>
                 ))}
@@ -342,10 +360,10 @@ export default async function HomePage() {
               <div className="pt-2">
                 <Link
                   href="/categorias"
-                  className="inline-flex items-center gap-2 bg-[#43673c] hover:bg-[#324f2d] text-white font-black px-10 py-4 rounded-2xl text-sm transition-all duration-300 shadow-xl hover:shadow-[0_20px_50px_rgba(67,103,60,0.3)] hover:-translate-y-1 w-full sm:w-fit text-center justify-center"
+                  className="inline-flex items-center gap-2 bg-secondary hover:bg-secondary-hover text-on-tertiary font-black px-10 py-4 rounded-2xl text-sm transition-all duration-300 shadow-xl hover:-translate-y-1 w-full sm:w-fit text-center justify-center"
                 >
                   Explorar Catálogo USA
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                     <line x1="5" y1="12" x2="19" y2="12" />
                     <polyline points="12 5 19 12 12 19" />
                   </svg>
