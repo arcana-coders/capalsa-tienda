@@ -182,24 +182,8 @@ export default function ProductInfo({ producto }: { producto: Producto }) {
         </div>
       </div>
 
-      {/* Bullets — Highlighting features */}
-      {bullets.length > 0 && (
-        <ul className="space-y-3 pt-2">
-          {bullets.slice(0, 5).map((b: string, i: number) => (
-            <li key={i} className="flex gap-3 text-sm text-[#1b1c1c] leading-relaxed group">
-              <span className="flex-shrink-0 w-5 h-5 rounded-full bg-[#f5f3f3] border border-[#c4c8ce]/30 flex items-center justify-center text-[#43673c] group-hover:bg-[#c1ebb5]/40 group-hover:scale-110 transition-all duration-300">
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-              </span>
-              <span className="font-medium">{sanitizeText(b)}</span>
-            </li>
-          ))}
-        </ul>
-      )}
-
-      {/* CTA Section */}
-      <div className="flex flex-col gap-3 pt-4">
+      {/* CTA Section — keep the buying action next to quantity and price. */}
+      <div className="flex flex-col gap-3">
         <button
           onClick={handleAgregar}
           className={`
@@ -223,6 +207,22 @@ export default function ProductInfo({ producto }: { producto: Producto }) {
           Compra 100% protegida y garantizada
         </p>
       </div>
+
+      {/* Bullets — Highlighting features */}
+      {bullets.length > 0 && (
+        <ul className="space-y-3 pt-2">
+          {bullets.slice(0, 5).map((b: string, i: number) => (
+            <li key={i} className="flex gap-3 text-sm text-[#1b1c1c] leading-relaxed group">
+              <span className="flex-shrink-0 w-5 h-5 rounded-full bg-[#f5f3f3] border border-[#c4c8ce]/30 flex items-center justify-center text-[#43673c] group-hover:bg-[#c1ebb5]/40 group-hover:scale-110 transition-all duration-300">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+              </span>
+              <span className="font-medium">{sanitizeText(b)}</span>
+            </li>
+          ))}
+        </ul>
+      )}
 
       {/* Trust Badges */}
       <div className="pt-4 border-t border-[#c4c8ce]/20 flex flex-col items-center w-full">

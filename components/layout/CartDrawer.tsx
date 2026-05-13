@@ -2,14 +2,24 @@
 
 import { useCartStore } from '@/lib/store'
 import Link from 'next/link'
+import { useEffect, useState } from 'react'
 
 export default function CartDrawer() {
   const { items, isOpen, closeCart, removeItem, updateQuantity } = useCartStore() as any
+  const [shouldRender, setShouldRender] = useState(isOpen)
+
+  useEffect(() => {
+    if (isOpen) setShouldRender(true)
+  }, [isOpen])
 
   const formatPrice = (n: number) =>
     n.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' })
 
   const subtotal = items.reduce((sum: number, i: any) => sum + (Number(i.precio) * i.cantidad), 0)
+
+  if (!shouldRender) {
+    return null
+  }
 
   return (
     <>
@@ -26,6 +36,9 @@ export default function CartDrawer() {
         className={`fixed top-0 right-0 h-full w-full max-w-sm bg-white z-50 shadow-[0_0_50px_rgba(0,0,0,0.1)] flex flex-col transition-transform duration-500 ease-out ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
+        onTransitionEnd={() => {
+          if (!isOpen) setShouldRender(false)
+        }}
       >
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-6 border-b border-[#c4c8ce]/10">

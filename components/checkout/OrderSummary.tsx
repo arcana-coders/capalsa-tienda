@@ -13,6 +13,9 @@ import {
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
+const DISCOUNT_CODE = 'GRACIAS10'
+const DISCOUNT_RATE = 0.1
+
 const IconPayPal = () => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M20 7.333c0 4-2.667 6-6.667 6H10.5l-1 5a.5.5 0 0 1-.5.4h-3a.5.5 0 0 1-.5-.6l2.333-11.666a1 1 0 0 1 1-.867h5.334c4.133 0 5.8 1.734 5.8 3.734z" fill="#003087"/>
@@ -64,9 +67,13 @@ export default function OrderSummary({ paymentMethod, setPaymentMethod, clienteD
   const router = useRouter()
   const [isProcessing, setIsProcessing] = useState(false)
   const [showCardForm, setShowCardForm] = useState(false)
+  const [couponInput, setCouponInput] = useState('')
+  const [couponCode, setCouponCode] = useState('')
+  const [couponMessage, setCouponMessage] = useState('')
 
   const subtotal = items.reduce((sum: number, i: any) => sum + (Number(i.precio) * i.cantidad), 0)
-  const grandTotal = subtotal
+  const discount = couponCode === DISCOUNT_CODE ? Math.round(subtotal * DISCOUNT_RATE * 100) / 100 : 0
+  const grandTotal = Math.max(subtotal - discount, 0)
 
   const formatPrice = (n: number) =>
     n.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' })
@@ -82,7 +89,7 @@ export default function OrderSummary({ paymentMethod, setPaymentMethod, clienteD
     const res = await fetch("/api/checkout/paypal/create-order", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ items, clienteData }),
+      body: JSON.stringify({ items, clienteData, couponCode }),
     })
     const order = await res.json()
     return order.id
@@ -94,8 +101,13 @@ export default function OrderSummary({ paymentMethod, setPaymentMethod, clienteD
       const res = await fetch("/api/checkout/paypal/capture-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ orderID, clienteData, items, total: grandTotal }),
-      })
+        body: JSON.stringify({ orderID, clienteData, items, couponCode }),
+      });
+
+      if (!res.ok) {
+        throw new Error('Error en la respuesta del servidor');
+      }
+
       const result = await res.json()
       if (result.status === 'COMPLETED') {
         clearCart()
@@ -109,6 +121,20 @@ export default function OrderSummary({ paymentMethod, setPaymentMethod, clienteD
     } finally {
       setIsProcessing(false)
     }
+  }
+
+  const handleApplyCoupon = () => {
+    const normalized = couponInput.trim().toUpperCase()
+
+    if (normalized === DISCOUNT_CODE) {
+      setCouponCode(DISCOUNT_CODE)
+      setCouponInput(DISCOUNT_CODE)
+      setCouponMessage('Descuento aplicado.')
+      return
+    }
+
+    setCouponCode('')
+    setCouponMessage(normalized ? 'Código no válido.' : 'Ingresa un código.')
   }
 
   return (
@@ -152,6 +178,39 @@ export default function OrderSummary({ paymentMethod, setPaymentMethod, clienteD
             <span className="text-[#74787e] font-medium">Envío Gratis Nacional</span>
             <span className="text-[#43673c] font-bold uppercase tracking-widest text-[10px]">¡Gratis!</span>
           </div>
+          <div className="pt-2">
+            <label htmlFor="coupon" className="text-[10px] font-black text-[#74787e] uppercase tracking-[0.18em] mb-2 block">
+              Código de descuento
+            </label>
+            <div className="flex gap-2">
+              <input
+                id="coupon"
+                type="text"
+                value={couponInput}
+                onChange={(e) => setCouponInput(e.target.value)}
+                placeholder="Ingresa tu código"
+                className="min-w-0 flex-1 h-11 rounded-2xl bg-[#f5f3f3] px-4 text-sm font-bold uppercase tracking-wide text-[#1b1c1c] outline-none ring-1 ring-[#c4c8ce]/20 focus:ring-[#00386c]"
+              />
+              <button
+                type="button"
+                onClick={handleApplyCoupon}
+                className="h-11 rounded-2xl bg-[#00386c] px-4 text-xs font-black text-white hover:bg-[#1a4f8b] transition-colors"
+              >
+                Aplicar
+              </button>
+            </div>
+            {couponMessage && (
+              <p className={`mt-2 text-[11px] font-bold ${couponCode ? 'text-[#43673c]' : 'text-[#794000]'}`}>
+                {couponMessage}
+              </p>
+            )}
+          </div>
+          {discount > 0 && (
+            <div className="flex justify-between items-center text-sm">
+              <span className="text-[#43673c] font-bold">Descuento {DISCOUNT_CODE}</span>
+              <span className="text-[#43673c] font-black">-{formatPrice(discount)}</span>
+            </div>
+          )}
         </div>
 
         <div className="flex justify-between items-center py-6">
