@@ -14,31 +14,48 @@ export async function sendOrderConfirmation({
     return { success: false };
   }
 
+  if (!email) {
+    console.warn(`[CAPALSA] Orden ${orderNumber} sin email de cliente — solo se notificará a tienda.`);
+  }
+
   const resend = new Resend(process.env.RESEND_API_KEY);
 
   try {
-    const data = await resend.emails.send({
-      from: 'Capalsa <contacto@capalsa.com>',
-      to: [email],
-      subject: `Confirmación de Pedido: ${orderNumber}`,
-      react: OrderConfirmationEmail({
-        orderNumber,
-        customerName,
-        items,
-        total,
-        address
-      }),
-    });
+    let data;
+    if (email) {
+      const customerEmail = await resend.emails.send({
+        from: 'Capalsa <contacto@capalsa.com>',
+        to: [email],
+        subject: `Confirmación de Pedido: ${orderNumber}`,
+        react: OrderConfirmationEmail({
+          orderNumber,
+          customerName,
+          items,
+          total,
+          address
+        }),
+      });
+
+      if (customerEmail.error) {
+        throw new Error(`Resend cliente: ${customerEmail.error.message}`);
+      }
+
+      data = customerEmail.data;
+    }
 
     // Copia de nueva venta a la cuenta de negocio
-    await resend.emails.send({
+    const storeEmail = await resend.emails.send({
       from: 'Capalsa <contacto@capalsa.com>',
       to: ['contacto@capalsa.com'],
-      subject: `NUEVA VENTA: ${orderNumber}`,
-      text: `Se ha recibido un nuevo pedido de ${customerName} por un total de ${total} MXN.`,
+      subject: `Nueva venta Capalsa: ${orderNumber}`,
+      text: `Se ha recibido un nuevo pedido de ${customerName} por un total de $${total} MXN. Número de orden: ${orderNumber}`,
     });
 
-    return { success: true, data };
+    if (storeEmail.error) {
+      throw new Error(`Resend tienda: ${storeEmail.error.message}`);
+    }
+
+    return { success: true, data: data ?? storeEmail.data };
   } catch (error) {
     console.error('Error enviando email con Resend:', error);
     return { success: false, error };
