@@ -8,6 +8,18 @@ const BASE_URL = process.env.NODE_ENV === 'production'
   ? 'https://api-m.paypal.com' 
   : 'https://api-m.sandbox.paypal.com';
 
+type PayPalItem = {
+  asin?: string | null;
+  titulo?: string | null;
+  precio: number;
+  cantidad: number;
+};
+
+type PayPalOrderMetadata = {
+  storeName: string;
+  orderNumber: string;
+};
+
 /**
  * Obtiene el token de acceso OAuth2 para llamadas a la API
  */
@@ -35,7 +47,45 @@ export async function getPayPalAccessToken() {
 /**
  * Crea una orden en PayPal
  */
-export async function createPayPalOrder(items: any[], subtotal: number, clienteData?: any) {
+function buildPurchaseUnit(items: PayPalItem[], total: number, metadata?: PayPalOrderMetadata) {
+  const paypalItems = items.map((item) => ({
+    name: String(item.titulo || 'Producto').slice(0, 127),
+    sku: String(item.asin || item.titulo || 'producto').slice(0, 127),
+    quantity: String(item.cantidad),
+    unit_amount: {
+      currency_code: 'MXN',
+      value: Number(item.precio).toFixed(2),
+    },
+  }));
+  const itemTotal = items.reduce((sum, item) => sum + Number(item.precio) * Number(item.cantidad), 0);
+  const discount = Math.max(itemTotal - total, 0);
+  const description = `${metadata?.storeName || 'Capalsa'} - ${paypalItems.map((item) => item.name).join(', ')}`;
+
+  return {
+    ...(metadata?.orderNumber && { invoice_id: metadata.orderNumber }),
+    ...(metadata?.storeName && { custom_id: `${metadata.storeName} ${metadata.orderNumber}`.slice(0, 127) }),
+    description: description.slice(0, 127),
+    amount: {
+      currency_code: 'MXN',
+      value: total.toFixed(2),
+      breakdown: {
+        item_total: {
+          currency_code: 'MXN',
+          value: itemTotal.toFixed(2),
+        },
+        ...(discount > 0 && {
+          discount: {
+            currency_code: 'MXN',
+            value: discount.toFixed(2),
+          },
+        }),
+      },
+    },
+    items: paypalItems,
+  };
+}
+
+export async function createPayPalOrder(items: PayPalItem[], subtotal: number, clienteData?: any, metadata?: PayPalOrderMetadata) {
   const accessToken = await getPayPalAccessToken();
 
   // Pre-cargar datos del comprador para que PayPal no pida dirección de facturación
@@ -70,12 +120,7 @@ export async function createPayPalOrder(items: any[], subtotal: number, clienteD
       },
       ...(payer && { payer }),
       purchase_units: [
-        {
-          amount: {
-            currency_code: 'MXN',
-            value: subtotal.toFixed(2),
-          },
-        },
+        buildPurchaseUnit(items, subtotal, metadata),
       ],
     }),
   });

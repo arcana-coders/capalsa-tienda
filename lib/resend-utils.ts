@@ -19,6 +19,12 @@ export async function sendOrderConfirmation({
   }
 
   const resend = new Resend(process.env.RESEND_API_KEY);
+  const itemLines = (items ?? [])
+    .map((item: any) => `- ${item.titulo} | ASIN/SKU: ${item.asin ?? 'N/A'} | Cantidad: ${item.cantidad} | Precio: $${item.precio}`)
+    .join('\n');
+  const addressText = address
+    ? [address.calle, address.colonia, address.ciudad, address.estado, address.cp].filter(Boolean).join(', ')
+    : 'Sin direccion capturada';
 
   try {
     let data;
@@ -48,7 +54,15 @@ export async function sendOrderConfirmation({
       from: 'Capalsa <contacto@capalsa.com>',
       to: ['contacto@capalsa.com'],
       subject: `Nueva venta Capalsa: ${orderNumber}`,
-      text: `Se ha recibido un nuevo pedido de ${customerName} por un total de $${total} MXN. Número de orden: ${orderNumber}`,
+      text: `Tienda: Capalsa
+Numero de orden: ${orderNumber}
+Cliente: ${customerName || 'N/A'}
+Email cliente: ${email || 'N/A'}
+Direccion: ${addressText}
+Total: $${total} MXN
+
+Productos:
+${itemLines || 'Sin productos capturados'}`,
     });
 
     if (storeEmail.error) {
