@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { capturePayPalOrder } from '@/lib/paypal';
+import { capturePayPalOrder, getPayPalEnvironment } from '@/lib/paypal';
 import { db } from '@/lib/db';
 import { ordenes, productos } from '@/lib/schema';
 import { nanoid } from 'nanoid';
@@ -107,7 +107,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Pago no completado', detail: captureData }, { status: 400 });
     }
 
-    const numeroOrden = captureData.purchase_units?.[0]?.invoice_id ?? `CAP-${nanoid(8).toUpperCase()}`;
+    const orderPrefix = getPayPalEnvironment() === 'sandbox' ? 'CAP-SBX' : 'CAP';
+    const numeroOrden = captureData.purchase_units?.[0]?.invoice_id ?? `${orderPrefix}-${nanoid(8).toUpperCase()}`;
     const captureId = captureData.purchase_units?.[0]?.payments?.captures?.[0]?.id ?? orderID;
     const capturedAmount = getCapturedAmount(captureData);
 
@@ -146,14 +147,20 @@ export async function POST(request: Request) {
         email: clienteData?.email,
         orderNumber: numeroOrden,
         customerName: clienteData?.nombre,
+        phone: clienteData?.telefono,
         items: secureItems,
         total: String(total ?? 0),
+        discount: String(discount ?? 0),
+        couponCode: appliedCode,
         address: {
           calle: clienteData?.calle,
+          numExt: clienteData?.numExt,
+          numInt: clienteData?.numInt,
           colonia: clienteData?.colonia,
           ciudad: clienteData?.ciudad,
           estado: clienteData?.estado,
           cp: clienteData?.cp,
+          referencias: clienteData?.referencias,
         },
       });
     } catch (emailError) {

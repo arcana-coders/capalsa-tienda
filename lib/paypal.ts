@@ -4,9 +4,20 @@
 
 const PAYPAL_CLIENT_ID = process.env.PAYPAL_CLIENT_ID;
 const PAYPAL_CLIENT_SECRET = process.env.PAYPAL_CLIENT_SECRET;
-const BASE_URL = process.env.NODE_ENV === 'production' 
-  ? 'https://api-m.paypal.com' 
-  : 'https://api-m.sandbox.paypal.com';
+const EXPLICIT_PAYPAL_ENV = process.env.PAYPAL_ENV;
+const PAYPAL_ENV = EXPLICIT_PAYPAL_ENV || (process.env.NODE_ENV === 'production' ? 'live' : 'sandbox');
+const PAYPAL_API_URLS = {
+  live: 'https://api-m.paypal.com',
+  sandbox: 'https://api-m.sandbox.paypal.com',
+} as const;
+
+const BASE_URL = EXPLICIT_PAYPAL_ENV
+  ? PAYPAL_API_URLS[PAYPAL_ENV === 'live' ? 'live' : 'sandbox']
+  : process.env.PAYPAL_API_URL || PAYPAL_API_URLS[PAYPAL_ENV === 'live' ? 'live' : 'sandbox'];
+
+export function getPayPalEnvironment() {
+  return PAYPAL_ENV === 'live' ? 'live' : 'sandbox';
+}
 
 type PayPalItem = {
   asin?: string | null;
@@ -41,6 +52,10 @@ export async function getPayPalAccessToken() {
   });
 
   const data = await response.json();
+  if (!response.ok || !data.access_token) {
+    throw new Error(data.error_description || data.error || 'Error obteniendo token de PayPal');
+  }
+
   return data.access_token;
 }
 

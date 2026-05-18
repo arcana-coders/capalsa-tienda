@@ -2,19 +2,11 @@
 
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
-import { useEffect, Suspense } from 'react'
-import { gsap } from 'gsap'
+import { Suspense } from 'react'
 
 function SuccessContent() {
   const searchParams = useSearchParams()
   const orderNumber = searchParams.get('order') || 'CP-PREVIEW'
-
-  useEffect(() => {
-    const tl = gsap.timeline()
-    tl.from(".success-card", { scale: 0.9, opacity: 0, duration: 1, ease: "power4.out" })
-      .from(".success-icon", { scale: 0, rotate: -45, duration: 0.8, ease: "back.out(2)" }, "-=0.5")
-      .from(".success-text", { y: 20, opacity: 0, stagger: 0.2, duration: 0.8 }, "-=0.4")
-  }, [])
 
   return (
     <main className="min-h-screen bg-[#fbf9f8] flex items-center justify-center p-6 py-20">

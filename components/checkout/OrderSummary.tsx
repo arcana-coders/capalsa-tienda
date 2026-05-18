@@ -11,7 +11,7 @@ import {
   usePayPalCardFields,
 } from "@paypal/react-paypal-js"
 import { useRouter } from 'next/navigation'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 const DISCOUNT_CODE = 'GRACIAS10'
 const DISCOUNT_RATE = 0.1
@@ -67,10 +67,36 @@ export default function OrderSummary({ paymentMethod, setPaymentMethod, clienteD
   const router = useRouter()
   const [isProcessing, setIsProcessing] = useState(false)
   const paymentInFlightRef = useRef(false)
-  const [showCardForm, setShowCardForm] = useState(false)
   const [couponInput, setCouponInput] = useState('')
   const [couponCode, setCouponCode] = useState('')
   const [couponMessage, setCouponMessage] = useState('')
+
+  useEffect(() => {
+    const originalError = console.error
+    console.error = (...args) => {
+      const text = args.map((arg) => {
+        if (typeof arg === 'string') return arg
+        try {
+          return JSON.stringify(arg)
+        } catch {
+          return ''
+        }
+      }).join(' ')
+
+      if (
+        text.includes('paypal_js_sdk_v5_unhandled_exception') &&
+        text.includes('Window closed before response')
+      ) {
+        return
+      }
+
+      originalError(...args)
+    }
+
+    return () => {
+      console.error = originalError
+    }
+  }, [])
 
   const subtotal = items.reduce((sum: number, i: any) => sum + (Number(i.precio) * i.cantidad), 0)
   const discount = couponCode === DISCOUNT_CODE ? Math.round(subtotal * DISCOUNT_RATE * 100) / 100 : 0
@@ -79,11 +105,20 @@ export default function OrderSummary({ paymentMethod, setPaymentMethod, clienteD
   const formatPrice = (n: number) =>
     n.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' })
 
+  const explicitPayPalEnv = process.env.NEXT_PUBLIC_PAYPAL_ENV
+  const paypalEnvironment: 'sandbox' | 'production' =
+    explicitPayPalEnv === 'live'
+      ? 'production'
+      : explicitPayPalEnv === 'sandbox' || process.env.NODE_ENV !== 'production'
+        ? 'sandbox'
+        : 'production'
+
   const initialOptions = {
     clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || "",
     currency: "MXN",
     intent: "capture",
     components: "buttons,card-fields",
+    environment: paypalEnvironment,
   }
 
   const handleCreateOrder = async () => {
@@ -263,71 +298,53 @@ export default function OrderSummary({ paymentMethod, setPaymentMethod, clienteD
               <div className="flex-1 h-px bg-[#c4c8ce]/30" />
             </div>
 
-            {/* Botón tarjeta */}
-            <button
-              type="button"
-              onClick={() => setShowCardForm(v => !v)}
-              className="w-full py-[14px] bg-[#1b1c1c] hover:bg-[#333] text-white font-bold rounded-2xl text-sm transition-all duration-200 ease-out active:scale-95 flex items-center justify-center gap-3"
-            >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-              Tarjeta de débito o crédito
-              <svg
-                className={`ml-auto transition-transform duration-200 ${showCardForm ? 'rotate-180' : ''}`}
-                width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"
-              >
-                <polyline points="6 9 12 15 18 9"/>
-              </svg>
-            </button>
-
             {/* Form de tarjeta (PayPal CardFields sin billing address) */}
-            {showCardForm && (
-              <PayPalCardFieldsProvider
-                createOrder={handleCreateOrder}
-                onApprove={async ({ orderID }) => handleCapture(orderID)}
-                onError={(err) => {
-                  console.error('PayPal CardFields error:', err)
-                  paymentInFlightRef.current = false
-                  setIsProcessing(false)
-                  alert('Error al procesar la tarjeta. Verifica los datos e intenta de nuevo.')
-                }}
-                style={fieldStyle}
-              >
-                <div className="bg-[#fbf9f8] rounded-2xl p-5 border border-[#c4c8ce]/15 space-y-4 mt-1">
+            <PayPalCardFieldsProvider
+              createOrder={handleCreateOrder}
+              onApprove={async ({ orderID }) => handleCapture(orderID)}
+              onError={(err) => {
+                console.error('PayPal CardFields error:', err)
+                paymentInFlightRef.current = false
+                setIsProcessing(false)
+                alert('Error al procesar la tarjeta. Verifica los datos e intenta de nuevo.')
+              }}
+              style={fieldStyle}
+            >
+              <div className="bg-[#fbf9f8] rounded-2xl p-5 border border-[#c4c8ce]/15 space-y-4 mt-1">
+                <div>
+                  <label className="text-[10px] font-black text-[#74787e] uppercase tracking-[0.15em] mb-2 block">
+                    Número de tarjeta
+                  </label>
+                  <div className={fieldContainerClass}>
+                    <PayPalNumberField />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="text-[10px] font-black text-[#74787e] uppercase tracking-[0.15em] mb-2 block">
-                      Número de tarjeta
+                      Vencimiento
                     </label>
                     <div className={fieldContainerClass}>
-                      <PayPalNumberField />
+                      <PayPalExpiryField />
                     </div>
                   </div>
-
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="text-[10px] font-black text-[#74787e] uppercase tracking-[0.15em] mb-2 block">
-                        Vencimiento
-                      </label>
-                      <div className={fieldContainerClass}>
-                        <PayPalExpiryField />
-                      </div>
-                    </div>
-                    <div>
-                      <label className="text-[10px] font-black text-[#74787e] uppercase tracking-[0.15em] mb-2 block">
-                        CVV
-                      </label>
-                      <div className={fieldContainerClass}>
-                        <PayPalCVVField />
-                      </div>
+                  <div>
+                    <label className="text-[10px] font-black text-[#74787e] uppercase tracking-[0.15em] mb-2 block">
+                      CVV
+                    </label>
+                    <div className={fieldContainerClass}>
+                      <PayPalCVVField />
                     </div>
                   </div>
-
-                  <CardSubmitButton
-                    label={`Pagar ${formatPrice(grandTotal)}`}
-                    isProcessing={isProcessing}
-                  />
                 </div>
-              </PayPalCardFieldsProvider>
-            )}
+
+                <CardSubmitButton
+                  label={`Pagar ${formatPrice(grandTotal)}`}
+                  isProcessing={isProcessing}
+                />
+              </div>
+            </PayPalCardFieldsProvider>
           </div>
         </div>
 

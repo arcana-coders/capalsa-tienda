@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { createPayPalOrder } from '@/lib/paypal';
+import { createPayPalOrder, getPayPalEnvironment } from '@/lib/paypal';
 import { db } from '@/lib/db';
 import { productos } from '@/lib/schema';
 import { nanoid } from 'nanoid';
@@ -80,7 +80,8 @@ export async function POST(request: Request) {
     }
 
     const { total } = applyDiscount(subtotal, couponCode);
-    const orderNumber = `CAP-${nanoid(8).toUpperCase()}`;
+    const orderPrefix = getPayPalEnvironment() === 'sandbox' ? 'CAP-SBX' : 'CAP';
+    const orderNumber = `${orderPrefix}-${nanoid(8).toUpperCase()}`;
     const order = await createPayPalOrder(secureItems, total, clienteData, {
       storeName: 'Capalsa',
       orderNumber,

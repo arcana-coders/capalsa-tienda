@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { db, schema } from '@/lib/db'
 import { and, eq, sql } from 'drizzle-orm'
 import ProductCard from '@/components/catalog/ProductCard'
+import CopyDiscountButton from '@/components/checkout/CopyDiscountButton'
 
 export const metadata = {
   title: 'Gracias por tu compra | CAPALSA',
@@ -53,13 +54,6 @@ const IconSearch = () => (
   </svg>
 )
 
-const IconCopy = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    <rect x="9" y="9" width="13" height="13" rx="2" />
-    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-  </svg>
-)
-
 const IconMessage = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
     <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z" />
@@ -100,9 +94,7 @@ export default async function GraciasPage() {
                   <p className="text-[10px] font-black uppercase tracking-[0.22em] text-outline mb-1">Código</p>
                   <p className="text-3xl font-black text-primary tracking-tight">{DISCOUNT_CODE}</p>
                 </div>
-                <div className="w-16 rounded-2xl bg-primary text-on-primary flex items-center justify-center" title="Código de descuento">
-                  <IconCopy />
-                </div>
+                <CopyDiscountButton code={DISCOUNT_CODE} />
               </div>
               <p className="mt-4 text-sm text-on-surface-variant leading-relaxed">
                 Úsalo en el checkout. Válido por tiempo limitado y no acumulable con otras promociones.
