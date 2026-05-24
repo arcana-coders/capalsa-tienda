@@ -108,7 +108,7 @@ export default function CheckoutPage() {
             )}
 
             <p className="mt-6 text-center text-[10px] text-outline font-medium leading-relaxed max-w-xs mx-auto">
-              Al hacer clic en &ldquo;Confirmar y Pagar&rdquo;, aceptas nuestros <Link href="/terminos" className="underline">Términos de Servicio</Link> y <Link href="/privacidad" className="underline">Políticas de Privacidad</Link>.
+              Al hacer clic en &ldquo;Confirmar y Pagar&rdquo;, aceptas nuestros <Link href="/terminos-y-condiciones" className="underline">Términos y Condiciones</Link> y <Link href="/aviso-de-privacidad" className="underline">Aviso de Privacidad</Link>.
             </p>
           </div>
 
